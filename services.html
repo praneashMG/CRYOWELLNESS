@@ -1,0 +1,1027 @@
+    <!DOCTYPE html>
+    <html lang="en" dir="ltr" data-theme="light">
+    <head>
+        <meta charset="UTF-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="assets/fav.png" type="image/jpeg">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <title>Cryotherapy & Recovery Wellness Studio</title>
+
+    <script src="tailwind.js"></script>
+        <style>
+            /* --- Modern Ice Blue Palette for Cryotherapy --- */
+            :root, html[data-theme='light'] {
+                --color-background: #FFFFFF;
+                --color-primary-text: #1E293B; 
+                --color-secondary-text: #475569;
+                --color-accent: #06b6d4; 
+                --color-accent-light: #cffafe; 
+                --color-border: #E2E8F0; 
+                --color-hover: #F8FAFC; 
+                --color-footer-bg: #0F172A;
+                --color-footer-text: #F1F5F9; 
+            }
+            html[data-theme='dark'] {
+                --color-background: #020617;
+                --color-primary-text: #F8FAFC;
+                --color-secondary-text: #94A3B8;
+                --color-accent: #22d3ee; 
+                --color-accent-light: #164e63; 
+                --color-border: #1E293B; 
+                --color-hover: #0F172A;
+                --color-footer-bg: #020617;
+                --color-footer-text: #F8FAFC;
+            }
+            
+            body {
+                background-color: var(--color-background);
+                color: var(--color-primary-text);
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+                transition: background-color 0.3s, color 0.3s;
+                overflow-x: hidden;
+            }
+            
+            .text-primary-text { color: var(--color-primary-text); }
+            .text-secondary-text { color: var(--color-secondary-text); }
+            .text-accent { color: var(--color-accent); }
+            .text-accent-light { color: var(--color-accent-light); }
+            .bg-background { background-color: var(--color-background); }
+            .bg-hover { background-color: var(--color-hover); }
+        .bg-accent { background-color: var(--color-accent); }
+            .border-border { border-color: var(--color-border); }
+
+            /* ── Typography Weight System ── */
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: 500 !important;
+            }
+            p, .text-secondary-text {
+                font-weight: 400 !important;
+            }
+
+            /* Rich Gradient */
+            .bg-custom-gradient {
+                background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+            }
+
+            #main-footer {
+                background-color: var(--color-footer-bg);
+                color: var(--color-footer-text);
+            }
+            #main-footer .footer-heading {
+                color: #3B82F6 !important; 
+            }
+            #main-footer .footer-link:hover {
+                color: #60A5FA;
+                padding-left: 4px;
+                transition: all 0.2s ease;
+            }
+
+            /* Nav Link */
+            .nav-link {
+                position: relative;
+                transition: color 0.3s;
+                padding: 0.5rem 0.75rem;
+                font-weight: 600;
+            }
+            .nav-link:hover {
+                color: var(--color-accent) !important;
+            }
+
+            /* DROPDOWN */
+            .dropdown-wrapper { position: relative; }
+            .dropdown-menu {
+                position: absolute;
+                top: calc(100% + 5px);
+                left: 0;
+                background-color: var(--color-background);
+                border: 1px solid var(--color-border);
+                border-radius: 0.5rem;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                min-width: 220px;
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+            }
+            .dropdown-wrapper:hover .dropdown-menu {
+                opacity: 1; visibility: visible; transform: translateY(0);
+                display: block;
+            }
+            .dropdown-menu a {
+                display: block;
+                padding: 0.75rem 1rem;
+                color: var(--color-primary-text);
+                text-decoration: none;
+                font-size: 0.875rem;
+                transition: all 0.2s ease;
+                border-bottom: 1px solid var(--color-border);
+            }
+            .dropdown-menu a:last-child { border-bottom: none; }
+            .dropdown-menu a:hover {
+                background-color: var(--color-hover);
+                color: var(--color-accent);
+                padding-left: 1.25rem;
+            }
+
+            @media (max-width: 1024px) {
+                .dropdown-menu { position: static; display: none; opacity: 1; visibility: visible; transform: none; box-shadow: none; }
+                .dropdown-wrapper:hover .dropdown-menu { display: block; }
+            }
+
+            /* ── Canonical Button System ── */
+            .btn-primary, .book-btn {
+                background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+                color: white;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .btn-primary:hover, .book-btn:hover {
+                opacity: 0.88;
+                transform: scale(1.04);
+                box-shadow: 0 6px 18px rgba(59,130,246,0.3);
+            }
+            .btn-outline {
+                background: transparent;
+                color: var(--color-accent);
+                border: 2px solid var(--color-accent);
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .btn-outline:hover {
+                background: var(--color-accent);
+                color: white;
+                box-shadow: 0 4px 12px rgba(59,130,246,0.25);
+            }
+            html[data-theme='dark'] .btn-outline {
+                color: #3B82F6;
+                border-color: #3B82F6;
+            }
+            html[data-theme='dark'] .btn-outline:hover {
+                background: #3B82F6;
+                color: #FFF;
+            }
+            .btn-cta-white {
+                background: white;
+                color: #2563EB;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .btn-cta-white:hover {
+                background: #f3f4f6;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            }
+
+        
+        html[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator,
+        html[data-theme='dark'] input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+    </style>
+    </head>
+    <body class="antialiased flex flex-col min-h-screen">
+
+        <header class="fixed top-4 left-0 right-0 z-50 transition-all duration-300 shadow-md border border-border bg-background mx-auto w-[96%] xl:w-[96%] 2xl:w-[92%] max-w-[1600px] rounded-full" id="main-header">
+            <nav class="px-6 sm:px-8 xl:px-6 2xl:px-12 py-3 flex items-center justify-between h-[70px]">
+                <a href="index.html" class="text-3xl font-serif font-extrabold tracking-wide flex items-center gap-2 shrink-0">    
+                    <i class="fa-solid fa-snowflake text-accent"></i>
+                    <span class="text-accent text-2xl">CRYOWELLNESS</span>
+                </a>
+
+                <div class="hidden xl:flex items-center xl:space-x-4 2xl:space-x-6 rtl:space-x-reverse">
+                    <div class="flex xl:space-x-3 2xl:space-x-6 rtl:space-x-reverse rtl:ml-6 text-primary-text font-medium text-[15px] 2xl:text-base">
+                        <div class="dropdown-wrapper">
+                            <button class="nav-link flex items-center" id="home-dropdown-btn">
+                                Home
+                                <svg class="w-3 h-3 ml-1 relative top-[2.5px] transition-transform duration-200 text-primary-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="index.html">Home 1</a>
+                                <a href="home2.html">Home 2</a>
+                            </div>
+                        </div>
+    <a href="services.html" class="nav-link">Services</a>
+    <a href="memberships.html" class="nav-link">Memberships</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <div class="dropdown-wrapper">
+                            <button class="nav-link flex items-center" id="dashboard-dropdown-btn">
+                                Dashboard
+                                <svg class="w-3 h-3 ml-1 relative top-[2.5px] transition-transform duration-200 text-primary-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="admin.html">Admin Dashboard</a>
+                                <a href="userdash.html">User Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-px h-6 bg-border xl:mx-1 2xl:mx-3"></div>
+                    
+                    <div class="flex items-center xl:space-x-2 2xl:space-x-4 rtl:space-x-reverse">
+                        <button id="theme-toggle" class="icon-btn text-primary-text hover:text-accent p-2 rounded-xl bg-hover border border-border transition duration-200">
+                            <svg class="w-5 h-5 light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <svg class="w-5 h-5 dark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        </button>
+                        <button id="lang-icon" class="text-primary-text hover:text-accent p-2 rounded-xl bg-hover border border-border transition duration-200">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+    </svg>                    </button>
+                        <div class="flex items-center gap-3 xl:ml-2 rtl:xl:ml-0 rtl:xl:mr-2 2xl:ml-4 rtl:2xl:ml-0 rtl:2xl:mr-4">
+                            <a href="login.html" class="icon-btn text-primary-text hover:text-accent w-12 h-12 rounded-full border border-border bg-hover flex items-center justify-center transition-transform hover:scale-105" title="Login">
+                                <i class="fa-solid fa-right-to-bracket text-lg"></i>
+                            </a>
+                            <a href="signup.html" class="book-btn w-12 h-12 rounded-full font-bold shadow-md flex items-center justify-center text-white hover:scale-105 transition-transform" title="Sign Up">
+                                <i class="fa-solid fa-user-plus text-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xl:hidden flex items-center">
+                    <button id="mobile-menu-open" class="icon-btn text-primary-text hover:text-accent p-1.5 rounded-full"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="flex-grow">      
+            <!-- ============================================================
+     SERVICES PAGE — SECTION 1: HERO / INTRODUCTION
+     Layout: Centered text with side accent panels (no full-bleed image)
+     Style: Editorial split with floating service icons
+     ============================================================ -->
+<section class="relative w-full min-h-[100vh] flex items-center justify-center overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 z-0">
+        <img src="assets/ss.jpg" alt="Hero Background" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center text-white mt-16">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 drop-shadow-md">
+            Complete Recovery,<br>
+                <span class="text-accent">One Studio</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto mb-8 drop-shadow">
+            From whole-body cryotherapy to infrared sauna and compression therapy — every service is designed to help you recover faster, feel better, and perform stronger.
+        </p>
+
+        <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <a href="booking.html" class="btn-primary px-4 py-2.5 sm:px-8 sm:py-3.5 rounded-full font-bold text-xs sm:text-base shadow-lg w-auto text-center border-none">
+                Book a Session
+            </a>
+            <a href="services.html" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 transition-all px-4 py-2.5 sm:px-8 sm:py-3.5 rounded-full font-bold text-xs sm:text-base w-auto text-center backdrop-blur-sm">
+                Explore Services
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES PAGE — SECTION 2: MAIN CONTENT / CATEGORIES
+     Layout: Centered heading + two-column alternating image/content
+     Style: Editorial magazine-style rows
+     ============================================================ -->
+<section class="w-full py-20 sm:py-24 bg-hover border-y border-border">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Centered heading -->
+        <div class="max-w-2xl mx-auto text-center mb-16">
+            <span class="text-accent font-semibold text-sm tracking-widest uppercase mb-3 block">Service Categories</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl text-primary-text mb-4">
+                Explore Our Recovery Services
+            </h2>
+            <p class="text-secondary-text text-base sm:text-lg leading-relaxed">
+                Each service can be booked individually or combined into a personalized protocol. All sessions are guided by certified specialists.
+            </p>
+        </div>
+
+        <!-- Category 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-16 lg:mb-24">
+            <div class="rounded-3xl overflow-hidden shadow-xl border border-border aspect-[4/3]">
+                <img src="assets/f1.jpg"
+                     alt="Whole-body cryotherapy chamber"
+                     class="w-full h-full object-cover">
+            </div>
+            <div class="text-center lg:text-left">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-4" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">Cryotherapy</span>
+                <h3 class="text-xl sm:text-2xl md:text-3xl text-primary-text mb-4">Whole-Body & Localized Cryo</h3>
+                <p class="text-secondary-text text-base leading-relaxed mb-6">
+                    Our flagship service. Step into a -140°C chamber for 2–3 minutes to trigger systemic anti-inflammatory responses, or choose targeted localized cryo for specific joints and muscles.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">3 min</p>
+                        <p class="text-secondary-text text-xs mt-1">Session Length</p>
+                    </div>
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">-140°C</p>
+                        <p class="text-secondary-text text-xs mt-1">Chamber Temp</p>
+                    </div>
+                </div>
+                <a href="booking.html" class="btn-primary inline-block px-7 py-3 rounded-full font-bold text-sm shadow-md">
+                    Book Cryo Session
+                </a>
+            </div>
+        </div>
+
+        <!-- Category 2 (reversed) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-16 lg:mb-24">
+            <div class="text-center lg:text-left order-2 lg:order-1">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-4" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">Therapy</span>
+                <h3 class="text-xl sm:text-2xl md:text-3xl text-primary-text mb-4">Compression & Infrared</h3>
+                <p class="text-secondary-text text-base leading-relaxed mb-6">
+                    Dynamic air compression improves lymphatic drainage and reduces swelling, while infrared sauna therapy relaxes muscles and detoxifies. Pair them with cryo for the ultimate recovery combo.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">30 min</p>
+                        <p class="text-secondary-text text-xs mt-1">Compression</p>
+                    </div>
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">40 min</p>
+                        <p class="text-secondary-text text-xs mt-1">Infrared Sauna</p>
+                    </div>
+                </div>
+                <a href="booking.html" class="btn-primary inline-block px-7 py-3 rounded-full font-bold text-sm shadow-md">
+                    Book Therapy
+                </a>
+            </div>
+            <div class="rounded-3xl overflow-hidden shadow-xl border border-border aspect-[4/3] order-1 lg:order-2">
+                <img src="assets/f2.jpg"
+                     alt="Compression therapy and infrared sauna"
+                     class="w-full h-full object-cover">
+            </div>
+        </div>
+
+        <!-- Category 3 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div class="rounded-3xl overflow-hidden shadow-xl border border-border aspect-[4/3]">
+                <img src="assets/f3.jpg"
+                     alt="Athlete recovery protocol"
+                     class="w-full h-full object-cover">
+            </div>
+            <div class="text-center lg:text-left">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-4" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">Athletes</span>
+                <h3 class="text-xl sm:text-2xl md:text-3xl text-primary-text mb-4">Athlete Recovery Program</h3>
+                <p class="text-secondary-text text-base leading-relaxed mb-6">
+                    A bundled protocol combining cryo, compression, guided stretching, and nutrition guidance — built for competitive athletes who need to recover faster between training sessions.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">90 min</p>
+                        <p class="text-secondary-text text-xs mt-1">Full Protocol</p>
+                    </div>
+                    <div class="bg-background border border-border rounded-xl p-4 text-center">
+                        <p class="text-accent font-bold text-lg">4-in-1</p>
+                        <p class="text-secondary-text text-xs mt-1">Combined Services</p>
+                    </div>
+                </div>
+                <a href="booking.html" class="btn-primary inline-block px-7 py-3 rounded-full font-bold text-sm shadow-md">
+                    Book Athlete Recovery
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES PAGE — SECTION 3: KEY SERVICES / FEATURES
+     Layout: Centered heading + detailed service cards with pricing
+     Style: Premium service menu with hover accent
+     ============================================================ -->
+<section class="w-full py-20 sm:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Centered heading -->
+        <div class="max-w-2xl mx-auto text-center mb-14 sm:mb-16">
+            <span class="text-accent font-semibold text-sm tracking-widest uppercase mb-3 block">Pricing & Packages</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl text-primary-text mb-4">
+                Transparent Pricing, Real Value
+            </h2>
+            <p class="text-secondary-text text-base sm:text-lg leading-relaxed">
+                No hidden fees. Choose a single session, a bundle, or a monthly membership — whatever fits your recovery routine.
+            </p>
+        </div>
+
+        <!-- Pricing cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+
+            <!-- Single Session -->
+            <div class="bg-background border border-border rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-4" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                        <i class="fa-solid fa-snowflake"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl text-primary-text mb-2">Single Session</h3>
+                    <p class="text-secondary-text text-sm">Perfect for first-timers</p>
+                </div>
+                <div class="text-center mb-6">
+                    <span class="text-4xl sm:text-5xl font-bold text-accent">$45</span>
+                    <span class="text-secondary-text text-sm">/ session</span>
+                </div>
+                <ul class="space-y-3 mb-8 flex-grow">
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> One whole-body cryo session
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Certified specialist guidance
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Post-session consultation
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> No commitment required
+                    </li>
+                </ul>
+                <a href="booking.html" class="btn-outline block text-center px-6 py-3 rounded-full font-bold text-sm">
+                    Book Single
+                </a>
+            </div>
+
+            <!-- Recovery Bundle (Featured) -->
+            <div class="bg-custom-gradient border border-border rounded-3xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col relative overflow-hidden lg:scale-105">
+                <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-bold">
+                    POPULAR
+                </div>
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl text-white mb-2">Recovery Bundle</h3>
+                    <p class="text-white/80 text-sm">Best value for regulars</p>
+                </div>
+                <div class="text-center mb-6">
+                    <span class="text-4xl sm:text-5xl font-bold text-white">$120</span>
+                    <span class="text-white/80 text-sm">/ 3 sessions</span>
+                </div>
+                <ul class="space-y-3 mb-8 flex-grow">
+                    <li class="flex items-start gap-3 text-white/90 text-sm">
+                        <i class="fa-solid fa-check text-white mt-1"></i> 3 whole-body cryo sessions
+                    </li>
+                    <li class="flex items-start gap-3 text-white/90 text-sm">
+                        <i class="fa-solid fa-check text-white mt-1"></i> 1 compression therapy session
+                    </li>
+                    <li class="flex items-start gap-3 text-white/90 text-sm">
+                        <i class="fa-solid fa-check text-white mt-1"></i> Priority booking
+                    </li>
+                    <li class="flex items-start gap-3 text-white/90 text-sm">
+                        <i class="fa-solid fa-check text-white mt-1"></i> Save $25 vs single sessions
+                    </li>
+                </ul>
+                <a href="booking.html" class="btn-cta-white block text-center px-6 py-3 rounded-full font-bold text-sm">
+                    Book Bundle
+                </a>
+            </div>
+
+            <!-- Monthly Membership -->
+            <div class="bg-background border border-border rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-4" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl text-primary-text mb-2">Monthly Membership</h3>
+                    <p class="text-secondary-text text-sm">Unlimited recovery access</p>
+                </div>
+                <div class="text-center mb-6">
+                    <span class="text-4xl sm:text-5xl font-bold text-accent">$199</span>
+                    <span class="text-secondary-text text-sm">/ month</span>
+                </div>
+                <ul class="space-y-3 mb-8 flex-grow">
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Unlimited cryo sessions
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Unlimited compression therapy
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Infrared sauna access
+                    </li>
+                    <li class="flex items-start gap-3 text-secondary-text text-sm">
+                        <i class="fa-solid fa-check text-accent mt-1"></i> Member-only pricing on add-ons
+                    </li>
+                </ul>
+                <a href="memberships.html" class="btn-outline block text-center px-6 py-3 rounded-full font-bold text-sm">
+                    Join Membership
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES PAGE — SECTION 4: BENEFITS / PROCESS
+     Layout: Centered heading + 2x2 benefit grid with icons
+     Style: Clean icon-driven benefit cards
+     ============================================================ -->
+<section class="w-full py-20 sm:py-24 bg-hover border-y border-border">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Centered heading -->
+        <div class="max-w-2xl mx-auto text-center mb-14 sm:mb-16">
+            <span class="text-accent font-semibold text-sm tracking-widest uppercase mb-3 block">The Experience</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl text-primary-text mb-4">
+                What to Expect at Your Session
+            </h2>
+            <p class="text-secondary-text text-base sm:text-lg leading-relaxed">
+                From the moment you walk in, every detail is designed to make your recovery comfortable, safe, and effective.
+            </p>
+        </div>
+
+        <!-- 2x2 Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
+
+            <!-- Benefit 1 -->
+            <div class="bg-background border border-border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 text-center">
+                <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-5" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <h3 class="text-lg text-primary-text mb-3">Health Screening</h3>
+                <p class="text-secondary-text text-sm leading-relaxed">
+                    A quick assessment ensures cryotherapy is safe and appropriate for your body before your first session.
+                </p>
+            </div>
+
+            <!-- Benefit 2 -->
+            <div class="bg-background border border-border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 text-center">
+                <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-5" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <h3 class="text-lg text-primary-text mb-3">Guided Session</h3>
+                <p class="text-secondary-text text-sm leading-relaxed">
+                    A certified specialist stays with you throughout, monitoring comfort and timing for optimal results.
+                </p>
+            </div>
+
+            <!-- Benefit 3 -->
+            <div class="bg-background border border-border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 text-center">
+                <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-5" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h3 class="text-lg text-primary-text mb-3">Instant Results</h3>
+                <p class="text-secondary-text text-sm leading-relaxed">
+                    Most clients feel reduced soreness, improved mood, and higher energy within hours of their first session.
+                </p>
+            </div>
+
+            <!-- Benefit 4 -->
+            <div class="bg-background border border-border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 text-center">
+                <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-white text-xl mb-5" style="background: linear-gradient(135deg,#06b6d4 0%,#0369a1 100%);">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <h3 class="text-lg text-primary-text mb-3">Ongoing Support</h3>
+                <p class="text-secondary-text text-sm leading-relaxed">
+                    We track your progress and adjust your protocol over time to keep you moving forward.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES PAGE — SECTION 5: ENGAGEMENT / TRUST / FEATURED CONTENT
+     Layout: Centered heading + FAQ accordion + testimonial strip
+     Style: Q&A format with client quote below
+     ============================================================ -->
+<section class="w-full py-20 sm:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Centered heading -->
+        <div class="max-w-2xl mx-auto text-center mb-14 sm:mb-16">
+            <span class="text-accent font-semibold text-sm tracking-widest uppercase mb-3 block">Common Questions</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl text-primary-text mb-4">
+                Everything You Need to Know
+            </h2>
+            <p class="text-secondary-text text-base sm:text-lg leading-relaxed">
+                Still have questions? Our team is always happy to help — just reach out before your first visit.
+            </p>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="max-w-3xl mx-auto space-y-4 mb-16">
+
+            <!-- FAQ 1 -->
+            <details class="group bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                <summary class="flex items-center justify-between p-5 sm:p-6 cursor-pointer list-none">
+                    <h3 class="text-primary-text text-sm sm:text-base font-semibold pr-4">Is cryotherapy safe?</h3>
+                    <span class="text-accent shrink-0 transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
+                </summary>
+                <div class="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-border pt-4">
+                    <p class="text-secondary-text text-sm leading-relaxed">
+                        Yes — whole-body cryotherapy is considered safe for most healthy adults. Sessions are short (2–3 minutes), and a certified specialist monitors you throughout. We screen for contraindications during your first visit.
+                    </p>
+                </div>
+            </details>
+
+            <!-- FAQ 2 -->
+            <details class="group bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                <summary class="flex items-center justify-between p-5 sm:p-6 cursor-pointer list-none">
+                    <h3 class="text-primary-text text-sm sm:text-base font-semibold pr-4">How many sessions do I need?</h3>
+                    <span class="text-accent shrink-0 transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
+                </summary>
+                <div class="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-border pt-4">
+                    <p class="text-secondary-text text-sm leading-relaxed">
+                        Many clients feel benefits after one session. For chronic pain or athletic recovery, we typically recommend 2–3 sessions per week for several weeks. Your specialist will build a personalized plan.
+                    </p>
+                </div>
+            </details>
+
+            <!-- FAQ 3 -->
+            <details class="group bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                <summary class="flex items-center justify-between p-5 sm:p-6 cursor-pointer list-none">
+                    <h3 class="text-primary-text text-sm sm:text-base font-semibold pr-4">What should I wear?</h3>
+                    <span class="text-accent shrink-0 transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
+                </summary>
+                <div class="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-border pt-4">
+                    <p class="text-secondary-text text-sm leading-relaxed">
+                        For whole-body cryo, we provide protective gloves, socks, and slippers. You'll wear dry, comfortable undergarments or athletic wear. Our team will guide you through preparation before your session.
+                    </p>
+                </div>
+            </details>
+
+            <!-- FAQ 4 -->
+            <details class="group bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                <summary class="flex items-center justify-between p-5 sm:p-6 cursor-pointer list-none">
+                    <h3 class="text-primary-text text-sm sm:text-base font-semibold pr-4">Can I combine services in one visit?</h3>
+                    <span class="text-accent shrink-0 transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
+                </summary>
+                <div class="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-border pt-4">
+                    <p class="text-secondary-text text-sm leading-relaxed">
+                        Absolutely. Many clients pair cryotherapy with compression therapy or infrared sauna for enhanced results. Our staff can recommend the best combination for your goals.
+                    </p>
+                </div>
+            </details>
+
+        </div>
+
+        <!-- Testimonial strip -->
+        <div class="max-w-3xl mx-auto bg-custom-gradient rounded-3xl p-8 sm:p-10 text-center shadow-xl relative overflow-hidden">
+            <div class="absolute top-[-40px] right-[-40px] text-white/10 text-[140px] pointer-events-none select-none">
+                <i class="fa-solid fa-quote-right"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center gap-1 text-white mb-5">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-white text-base sm:text-lg lg:text-xl italic leading-relaxed mb-6 max-w-2xl mx-auto">
+                    “I was skeptical at first, but after two weeks of cryo + compression, my marathon recovery time dropped dramatically. This place is a game-changer.”
+                </p>
+                <div class="flex items-center justify-center gap-3">
+                    <img src="assets/men2.jpg"
+                         alt="Client portrait" class="w-11 h-11 rounded-full object-cover border-2 border-white/40">
+                    <div class="text-left">
+                        <p class="text-white font-bold text-sm">Marcus R.</p>
+                        <p class="text-white/75 text-xs">Marathon Runner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES PAGE — SECTION 6: FINAL CTA / CLOSING
+     Layout: Centered heading + single wide CTA card
+     Style: Bold full-width closing panel with dual buttons
+     ============================================================ -->
+<section class="w-full py-20 sm:py-24 bg-hover border-t border-border">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="max-w-4xl mx-auto bg-background border border-border rounded-3xl overflow-hidden shadow-2xl">
+
+            <!-- Gradient top strip -->
+            <div class="bg-custom-gradient px-6 sm:px-12 py-10 sm:py-14 text-center relative overflow-hidden">
+                <div class="absolute top-[-30px] left-[-30px] text-white/10 text-[120px] pointer-events-none select-none">
+                    <i class="fa-solid fa-snowflake"></i>
+                </div>
+                <div class="absolute bottom-[-50px] right-[-30px] text-white/10 text-[140px] pointer-events-none select-none">
+                    <i class="fa-regular fa-snowflake"></i>
+                </div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl text-white mb-4 leading-tight">
+                        Ready to Book Your Service?
+                    </h2>
+                    <p class="text-white/85 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+                        Choose a time, pick your service, and let our specialists take care of the rest. First-time clients get 20% off.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom action strip -->
+            <div class="px-6 sm:px-12 py-8 sm:py-10 text-center">
+                <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4">
+                    <a href="booking.html" class="btn-primary px-8 py-3.5 rounded-full font-bold text-sm sm:text-base shadow-md w-full sm:w-auto text-center">
+                        <i class="fa-solid fa-calendar-check mr-2"></i> Book a Service
+                    </a>
+                    <a href="contact.html" class="btn-outline px-4 py-2.5 sm:px-8 sm:py-3.5 rounded-full font-bold text-xs sm:text-base w-auto text-center">
+                        Ask a Question
+                    </a>
+                </div>
+                <p class="text-secondary-text text-xs sm:text-sm mt-6">
+                    <i class="fa-solid fa-phone text-accent mr-2"></i> +1 (800) 555-0199 &nbsp;·&nbsp;
+                    <i class="fa-solid fa-envelope text-accent mr-2"></i> info@cryowellness.com
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>               
+    </main>
+
+        <div id="mobile-menu-drawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+            <div id="drawer-backdrop" class="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+            <div id="drawer-content" class="absolute top-0 left-0 right-0 bg-background rounded-b-2xl shadow-2xl p-6 xl:hidden max-h-[85vh] overflow-y-auto transform translate-y-[-100%] transition-transform duration-300 ease-out">
+                <div class="flex justify-between items-center pb-4 border-b border-border">
+                    <a href="index.html" class="text-2xl font-serif font-extrabold tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-snowflake text-accent"></i>
+                        <span class="text-accent">CRYOWELLNESS</span>
+                    </a>
+                    <button id="mobile-menu-close" class="text-primary-text hover:text-accent"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                </div>
+                <nav class="flex flex-col space-y-2 py-4">
+                    <div>
+                        <button class="block text-primary-text font-semibold text-lg py-2 w-full text-left flex justify-between items-center" id="mobile-homes-toggle">
+                            Home <svg class="w-4 h-4 transform transition-transform duration-200 text-primary-text" id="homes-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="mobile-homes-menu" class="hidden pl-4 flex flex-col space-y-1 mt-1 border-l-2 border-border">
+                            <a href="index.html" class="block text-secondary-text hover:text-accent text-base py-1">Home 1</a>
+                            <a href="home2.html" class="block text-secondary-text hover:text-accent text-base py-1">Home 2</a>
+                        </div>
+                    </div>
+    <a href="services.html" class="block text-primary-text font-semibold text-lg py-2">Services</a>
+    <a href="memberships.html" class="block text-primary-text font-semibold text-lg py-2">Memberships</a>
+    <a href="about.html" class="block text-primary-text font-semibold text-lg py-2">About</a>
+    <a href="contact.html" class="block text-primary-text font-semibold text-lg py-2">Contact</a>
+    <!-- Dashboard Dropdown -->
+    <div>
+        <button class="block text-primary-text font-semibold text-lg py-2 w-full text-left flex justify-between items-center" id="mobile-dashboard-toggle">
+            Dashboard
+            <svg class="w-4 h-4 transform transition-transform duration-200" id="dashboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+
+        <div id="mobile-dashboard-menu" class="hidden pl-4 flex flex-col space-y-1 mt-1 border-l-2 border-border">
+            <a href="admin.html" class="block text-secondary-text hover:text-accent text-base py-1">Admin Dashboard</a>
+            <a href="userdash.html" class="block text-secondary-text hover:text-accent text-base py-1">User Dashboard</a>
+        </div>
+    </div>
+                </nav>
+                <div class="pt-4 border-t border-border mt-4 flex justify-around items-center">
+                    <button id="mobile-lang-icon-drawer" class="flex flex-col items-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+    </svg><span class="text-xs mt-1 text-secondary-text">RTL</span></button>
+                    <button id="drawer-theme-toggle" class="flex flex-col items-center">
+                        <svg class="w-6 h-6 light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <svg class="w-6 h-6 dark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                        <span class="text-xs mt-1 text-secondary-text">Theme</span>
+                    </button>
+                </div>
+                <div class="flex mt-5 gap-5 w-full">
+                    <a href="login.html" class="flex-1 btn-outline text-center py-1.5 rounded-xl font-bold text-sm shadow-md">Login</a>
+                    <a href="signup.html" class="flex-1 book-btn text-center py-2 rounded-xl font-bold text-sm shadow-md">Sign Up</a>
+                </div>
+            </div>
+        </div>
+
+        <footer id="main-footer" class="pt-20 transition-colors duration-300">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-gray-800">
+                    <div class="sm:col-span-2 lg:col-span-2">
+                        <a href="index.html" class="text-3xl font-serif font-extrabold tracking-wide flex items-center gap-2 mb-4">    
+                            <i class="fa-solid fa-snowflake text-accent"></i>
+                            <span class="text-accent text-2xl">CRYOWELLNESS</span>
+                        </a>
+    <p class="text-lg leading-relaxed max-w-sm !text-white-400">
+    Experience peak recovery and rejuvenation with our state-of-the-art cryotherapy, wellness, and holistic healing services.</p>                    <div class="flex gap-6 mt-10">
+                            <a href="#" class="text-white hover:text-accent transition text-xl"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white hover:text-accent transition text-xl"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white hover:text-accent transition text-xl"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="footer-heading font-bold text-xl mb-6">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="about.html" class="footer-link">About Us</a></li>
+                            <li><a href="services.html" class="footer-link">Services</a></li>
+                            <li><a href="pricing.html" class="footer-link">Pricing</a></li>
+                            <li><a href="booking.html" class="footer-link">Book Session</a></li>
+                            <li><a href="contact.html" class="footer-link">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="footer-heading font-bold text-xl mb-6">Address</h4>
+                        <ul class="space-y-2 text-white/80">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot mt-1 text-accent text-center w-5"></i>
+                                <span>123 Wellness Way,<br>Recovery Center, NY 10001</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-phone text-accent text-center w-5"></i>
+                                <a href="tel:+18005550199" class="footer-link">+1 (800) 555-0199</a>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-envelope text-accent text-center w-5"></i>
+                                <a href="mailto:info@cryowellness.com" class="footer-link">info@cryowellness.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="sm:col-span-2 lg:col-span-1">                        <h4 class="footer-heading font-bold text-xl mb-6">Newsletter</h4>
+                        <div class="flex flex-col space-y-4">
+                            <input type="email" placeholder="Email address" class="p-4 text-sm rounded-xl bg-gray-900 border border-gray-800 focus:outline-none text-white" />
+                            <button class="btn-primary font-bold py-3 rounded-xl">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-10 text-center text-white-500 text-sm">© 2026 Cryotherapy & Recovery Wellness Studio. All rights reserved.</div>
+            </div>
+        </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const html = document.documentElement;
+
+                // Drawer Control
+                const menuDrawer = document.getElementById('mobile-menu-drawer');
+                const menuContent = document.getElementById('drawer-content');
+                const menuBackdrop = document.getElementById('drawer-backdrop');
+
+                const openDrawer = () => {
+                    menuDrawer.classList.remove('pointer-events-none');
+                    menuContent.classList.remove('translate-y-[-100%]');
+                    menuBackdrop.classList.add('opacity-50', 'pointer-events-auto');
+                    document.body.style.overflow = 'hidden';
+                };
+                const closeDrawer = () => {
+                    menuContent.classList.add('translate-y-[-100%]');
+                    menuBackdrop.classList.remove('opacity-50', 'pointer-events-auto');
+                    setTimeout(() => { menuDrawer.classList.add('pointer-events-none'); document.body.style.overflow = ''; }, 300);
+                };
+
+                document.getElementById('mobile-menu-open').addEventListener('click', openDrawer);
+                document.getElementById('mobile-menu-close').addEventListener('click', closeDrawer);
+                menuBackdrop.addEventListener('click', closeDrawer);
+
+                // Accordions
+                const setupAccordion = (toggleId, menuId, iconId) => {
+                    const toggle = document.getElementById(toggleId);
+                    toggle?.addEventListener('click', () => {
+                        const menu = document.getElementById(menuId);
+                        const icon = document.getElementById(iconId);
+                        menu.classList.toggle('hidden');
+                        icon.classList.toggle('rotate-180');
+                    });
+                };
+                setupAccordion('mobile-homes-toggle', 'mobile-homes-menu', 'homes-icon');
+                setupAccordion('mobile-dashboard-toggle', 'mobile-dashboard-menu', 'dashboard-icon');
+
+
+                // Theme & RTL
+                const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('drawer-theme-toggle')];
+                const applyTheme = (theme) => {
+                    html.setAttribute('data-theme', theme);
+                    document.querySelectorAll('.light-icon').forEach(i => i.classList.toggle('hidden', theme === 'dark'));
+                    document.querySelectorAll('.dark-icon').forEach(i => i.classList.toggle('hidden', theme === 'light'));
+                };
+                themeToggles.forEach(btn => btn.addEventListener('click', () => {
+                    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('theme', next);
+                    applyTheme(next);
+                }));
+                applyTheme(localStorage.getItem('theme') || 'light');
+
+                const langToggles = [document.getElementById('lang-icon'), document.getElementById('mobile-lang-icon-drawer')];
+                langToggles.forEach(btn => btn.addEventListener('click', () => {
+                    const current = localStorage.getItem('language') === 'ar' ? 'en' : 'ar';
+                    localStorage.setItem('language', current);
+                    html.setAttribute('dir', current === 'ar' ? 'rtl' : 'ltr');
+                }));
+                html.setAttribute('dir', localStorage.getItem('language') === 'ar' ? 'rtl' : 'ltr');
+
+                // Active Nav Logic
+                const setActiveNavLink = () => {
+                    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+                    
+                    // Desktop Links
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.getAttribute('href') === currentPath) {
+                            link.classList.add('active', 'text-accent', 'font-bold');
+                        } else {
+                            link.classList.remove('active', 'text-accent', 'font-bold');
+                        }
+                    });
+
+                    // Desktop Dropdowns
+                    if (['index.html', 'home2.html'].includes(currentPath)) {
+                        document.getElementById('home-dropdown-btn')?.classList.add('active', 'text-accent', 'font-bold');
+                    }
+                    if (['admin.html', 'userdash.html'].includes(currentPath)) {
+                        document.getElementById('dashboard-dropdown-btn')?.classList.add('active', 'text-accent', 'font-bold');
+                    }
+
+                    // Mobile Links
+                    document.querySelectorAll('#drawer-content a').forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (href === currentPath) {
+                            link.classList.add('text-accent', 'font-bold');
+                            link.classList.remove('text-primary-text', 'text-secondary-text');
+                        } else {
+                            if (link.closest('#mobile-homes-menu') || link.closest('#mobile-dashboard-menu')) {
+                                link.classList.add('text-secondary-text');
+                                link.classList.remove('text-accent', 'font-bold');
+                            } else {
+                                link.classList.add('text-primary-text');
+                                link.classList.remove('text-accent', 'font-bold');
+                            }
+                        }
+                    });
+
+                    // Mobile Toggles
+                    if (['index.html', 'home2.html'].includes(currentPath)) {
+                        document.getElementById('mobile-homes-toggle')?.classList.add('text-accent', 'font-bold');
+                    }
+                    if (['admin.html', 'userdash.html'].includes(currentPath)) {
+                        document.getElementById('mobile-dashboard-toggle')?.classList.add('text-accent', 'font-bold');
+                    }
+                };
+                setActiveNavLink();
+            });
+            document.addEventListener("DOMContentLoaded", function () {
+
+        const btnMonthly = document.getElementById("btn-monthly");
+        const btnSeasonal = document.getElementById("btn-seasonal");
+
+        const monthlyPlans = document.getElementById("monthly-plans");
+        const seasonalPlans = document.getElementById("seasonal-plans");
+
+        if (!btnMonthly || !btnSeasonal || !monthlyPlans || !seasonalPlans) return;
+
+        btnMonthly.addEventListener("click", function () {
+
+            btnMonthly.classList.add("bg-[#3B82F6]", "text-white", "shadow-lg");
+            btnMonthly.classList.remove("text-primary-text");
+
+            btnSeasonal.classList.remove("bg-[#3B82F6]", "text-white", "shadow-lg");
+            btnSeasonal.classList.add("text-primary-text");
+
+            monthlyPlans.classList.remove("hidden");
+            monthlyPlans.classList.add("grid");
+
+            seasonalPlans.classList.remove("grid");
+            seasonalPlans.classList.add("hidden");
+
+        });
+
+        btnSeasonal.addEventListener("click", function () {
+
+            btnSeasonal.classList.add("bg-[#3B82F6]", "text-white", "shadow-lg");
+            btnSeasonal.classList.remove("text-primary-text");
+
+            btnMonthly.classList.remove("bg-[#3B82F6]", "text-white", "shadow-lg");
+            btnMonthly.classList.add("text-primary-text");
+
+            seasonalPlans.classList.remove("hidden");
+            seasonalPlans.classList.add("grid");
+
+            monthlyPlans.classList.remove("grid");
+            monthlyPlans.classList.add("hidden");
+
+        });
+
+    });
+        </script>
+    </body>
+    </html>
+
+
+
+
+
+
+
+
+
+

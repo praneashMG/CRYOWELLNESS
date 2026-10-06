@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/fav.png" type="image/jpeg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>My Dashboard | CryoWellness</title>
+
+    <script src="tailwind.js"></script>
+    <style>
+        /* --- Modern Ice Blue Palette (matches index.html) --- */
+        :root, html[data-theme='light'] {
+            --color-background: #FFFFFF;
+            --color-primary-text: #1E293B;
+            --color-secondary-text: #475569;
+            --color-accent: #06b6d4;
+            --color-accent-light: #cffafe;
+            --color-border: #E2E8F0;
+            --color-hover: #F8FAFC;
+            --color-footer-bg: #0F172A;
+            --color-footer-text: #F1F5F9;
+            --color-card-bg: #FFFFFF;
+            --color-success: #10B981;
+            --color-danger: #EF4444;
+            --color-warning: #F59E0B;
+        }
+        html[data-theme='dark'] {
+            --color-background: #020617;
+            --color-primary-text: #F8FAFC;
+            --color-secondary-text: #94A3B8;
+            --color-accent: #22d3ee;
+            --color-accent-light: #164e63;
+            --color-border: #1E293B;
+            --color-hover: #0F172A;
+            --color-footer-bg: #020617;
+            --color-footer-text: #F8FAFC;
+            --color-card-bg: #0F172A;
+            --color-success: #059669;
+            --color-danger: #DC2626;
+            --color-warning: #D97706;
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-primary-text);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        .text-primary-text { color: var(--color-primary-text); }
+        .text-secondary-text { color: var(--color-secondary-text); }
+        .text-accent { color: var(--color-accent); }
+        .bg-background { background-color: var(--color-background); }
+        .bg-hover { background-color: var(--color-hover); }
+        .bg-accent { background-color: var(--color-accent); }
+        .border-border { border-color: var(--color-border); }
+        .card-bg { background-color: var(--color-card-bg); }
+
+        h1, h2, h3, h4, h5, h6 { font-weight: 500 !important; }
+        p, .text-secondary-text { font-weight: 400 !important; }
+
+        .bg-custom-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+        }
+        .bg-accent-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+        }
+
+        /* Dashboard Cards */
+        .dash-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 1.25rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.04);
+        }
+        .dash-card:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 12px 24px -8px rgba(6, 182, 212, 0.15);
+        }
+
+        /* Sidebar */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            color: var(--color-secondary-text);
+            transition: all 0.18s ease;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            color: #FFFFFF;
+            background: linear-gradient(145deg, #06b6d4, #0369a1);
+        }
+        .sidebar-link:hover svg, .sidebar-link.active svg { stroke: white; }
+        .sidebar-link.logout:hover { background: #d13b3b; color: white; }
+
+        html[dir="rtl"] .sidebar-link { flex-direction: row-reverse; }
+        html[dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
+
+        /* Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .badge-active { background-color: var(--color-success); color: white; }
+        .badge-pending { background-color: var(--color-warning); color: white; }
+        .badge-confirmed { background-color: #3B82F6; color: white; }
+        .badge-completed { background-color: var(--color-success); color: white; }
+        .badge-cancelled { background-color: var(--color-danger); color: white; }
+
+        .status-pulse {
+            width: 10px; height: 10px;
+            background-color: var(--color-accent);
+            border-radius: 9999px;
+            box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.5);
+            animation: pulse2 2s infinite;
+        }
+        @keyframes pulse2 {
+            70% { box-shadow: 0 0 0 6px rgba(6, 182, 212, 0); }
+        }
+
+        /* Buttons */
+        .btn-primary, .book-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary:hover, .book-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 6px 18px rgba(6, 182, 212, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 10px;
+        }
+
+        #mobile-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            position: fixed;
+            inset: 0;
+            z-index: 55;
+        }
+        #mobile-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .admin-section { display: block; }
+
+        .toggle-switch {
+            width: 48px; height: 24px;
+            border-radius: 9999px;
+            padding: 2px;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active { background: var(--color-accent); }
+        .toggle-switch.inactive { background: var(--color-border); }
+        .toggle-switch .knob {
+            width: 20px; height: 20px;
+            background: white;
+            border-radius: 9999px;
+            transition: transform 0.2s;
+        }
+        .toggle-switch.active .knob { transform: translateX(24px); }
+        html[dir="rtl"] .toggle-switch.active .knob { transform: translateX(-24px); }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--color-border);
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #06b6d4, #0369a1);
+            transition: width 0.3s ease;
+        }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-secondary-text);
+            font-weight: 700;
+            border-bottom: 1px solid var(--color-border);
+        }
+        html[dir="rtl"] .data-table th { text-align: right; }
+        .data-table td {
+            padding: 1rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover { background-color: var(--color-hover); }
+    
+        html[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator,
+        html[data-theme='dark'] input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body class="antialiased bg-background h-screen overflow-hidden w-full">
+
+    <!-- TOP BAR -->
+    <header class="border-b border-border bg-background sticky top-0 z-50 w-full">
+        <div class="max-w-[1920px] mx-auto px-2 sm:px-6 lg:px-10 py-3 flex items-center justify-between gap-1 sm:gap-3">
+
+            <div class="flex items-center gap-1 sm:gap-3">
+                <button id="mobile-menu-toggle"
+                    class="xl:hidden p-1.5 sm:p-2 -ml-1 sm:-ml-2 rounded-xl hover:bg-hover transition text-primary-text"
+                    title="Open Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <a href="index.html" class="flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-snowflake text-accent text-xl sm:text-2xl"></i>
+                    <span class="hidden sm:block text-lg sm:text-2xl font-serif font-extrabold tracking-wide text-accent">CRYOWELLNESS</span>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-1 sm:gap-3 shrink-0 rtl:flex-row-reverse">
+                <div class="hidden md:flex items-center bg-hover rounded-full px-4 py-2 border border-border">
+                    <i class="fas fa-search text-secondary-text text-sm mr-2"></i>
+                    <input type="text" placeholder="Search sessions, bookings..." class="bg-transparent border-none outline-none text-sm w-40 lg:w-56 text-primary-text placeholder-secondary-text/50">
+                </div>
+
+                <button id="lang-toggle" class="hidden sm:block p-1.5 sm:p-2 rounded-full hover:bg-hover transition text-primary-text" title="Toggle RTL/LTR">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                    </svg>
+                </button>
+
+                <button id="theme-toggle-user" class="p-1.5 sm:p-2 rounded-full hover:bg-hover transition text-primary-text">
+                    <svg class="w-5 h-5 light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg class="w-5 h-5 dark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+
+                <div class="relative">
+                    <button class="p-1.5 sm:p-2 rounded-full hover:bg-hover transition text-primary-text relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+
+                <div class="relative flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-3 border-l border-border rtl:border-l-0 rtl:border-r min-w-0">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-accent/10 border border-accent flex items-center justify-center text-accent font-semibold">
+                            <i class="fas fa-user text-xs"></i>
+                        </div>
+                        <span class="absolute bottom-0 right-0 status-pulse"></span>
+                    </div>
+                    <div class="hidden sm:block text-sm">
+                        <p class="font-semibold leading-none">Marcus Reed</p>
+                        <p class="text-[10px] text-secondary-text mt-1 uppercase tracking-widest font-semibold">Elite Member</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-overlay" class="xl:hidden"></div>
+
+    <!-- MAIN LAYOUT -->
+    <main class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 py-6 h-[calc(100vh-64px)] w-full relative">
+        <div class="flex flex-col xl:flex-row gap-4 lg:gap-6 xl:gap-10 h-full">
+
+            <!-- SIDEBAR -->
+            <aside id="sidebar-container"
+                class="fixed xl:static top-0 left-0 rtl:right-0 rtl:left-auto h-full xl:h-auto w-72 lg:w-72 xl:w-80 z-[60] xl:z-10 transform -translate-x-full rtl:translate-x-full xl:translate-x-0 xl:rtl:translate-x-0 transition-transform duration-300 ease-in-out bg-background xl:bg-transparent flex-shrink-0">
+                <div class="dash-card p-5 h-full overflow-y-auto custom-scrollbar border-r xl:border border-border xl:rounded-[1.25rem] rounded-none shadow-none xl:shadow-md">
+
+                    <div class="flex xl:hidden justify-between items-center mb-6 px-2">
+                        <div class="flex items-center gap-2 text-accent">
+                            <i class="fas fa-bars-staggered"></i>
+                            <span class="text-xs font-medium uppercase tracking-widest">My Menu</span>
+                        </div>
+                        <button id="close-sidebar" class="p-2 hover:bg-hover rounded-lg text-primary-text">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex xl:hidden items-center gap-3 mb-6 px-2 pb-6 border-b border-border">
+                        <div class="relative flex-shrink-0">
+                            <div class="w-10 h-10 rounded-full bg-accent/10 border border-accent flex items-center justify-center text-accent font-semibold">
+                                <i class="fas fa-user text-sm"></i>
+                            </div>
+                            <span class="absolute bottom-0 right-0 status-pulse"></span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-primary-text leading-tight">Marcus Reed</p>
+                            <p class="text-[10px] text-secondary-text mt-0.5 uppercase tracking-widest font-medium">Elite Member</p>
+                        </div>
+                    </div>
+
+                    <nav class="flex flex-col gap-1">
+                        <p class="text-[10px] uppercase tracking-widest text-secondary-text font-medium mt-2 mb-2 px-2">My Recovery</p>
+                        <a href="#" onclick="activateSection('overview'); return false;" data-section="overview" class="sidebar-link active">
+                            <i class="fas fa-house-chimney w-5"></i>
+                            <span>Dashboard Home</span>
+                        </a>
+                        <a href="#" onclick="activateSection('booking'); return false;" data-section="booking" class="sidebar-link">
+                            <i class="fas fa-calendar-plus w-5"></i>
+                            <span>Book Session</span>
+                        </a>
+                        <a href="#" onclick="activateSection('sessions'); return false;" data-section="sessions" class="sidebar-link">
+                            <i class="fas fa-calendar-check w-5"></i>
+                            <span>My Sessions</span>
+                            <span class="ml-auto bg-accent/20 text-accent text-[10px] font-semibold px-1.5 py-0.5 rounded-full">3</span>
+                        </a>
+
+                        <p class="text-[10px] uppercase tracking-widest text-secondary-text font-medium mt-4 mb-2 px-2">History</p>
+                        <a href="#" onclick="activateSection('history'); return false;" data-section="history" class="sidebar-link">
+                            <i class="fas fa-clock-rotate-left w-5"></i>
+                            <span>Session History</span>
+                        </a>
+                        <a href="#" onclick="activateSection('progress'); return false;" data-section="progress" class="sidebar-link">
+                            <i class="fas fa-chart-line w-5"></i>
+                            <span>Recovery Progress</span>
+                        </a>
+
+                        <p class="text-[10px] uppercase tracking-widest text-secondary-text font-medium mt-4 mb-2 px-2">Account</p>
+                        <a href="#" onclick="activateSection('membership'); return false;" data-section="membership" class="sidebar-link">
+                            <i class="fas fa-id-card w-5"></i>
+                            <span>My Membership</span>
+                        </a>
+                        <a href="#" onclick="activateSection('payments'); return false;" data-section="payments" class="sidebar-link">
+                            <i class="fas fa-credit-card w-5"></i>
+                            <span>Payments</span>
+                        </a>
+                        <a href="#" onclick="activateSection('support'); return false;" data-section="support" class="sidebar-link">
+                            <i class="fas fa-headset w-5"></i>
+                            <span>Help & Support</span>
+                        </a>
+                        <a href="#" onclick="activateSection('settings'); return false;" data-section="settings" class="sidebar-link">
+                            <i class="fas fa-sliders w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" onclick="activateSection('logout'); return false;" class="sidebar-link logout mt-2 text-red-500">
+                            <i class="fas fa-power-off w-5"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </nav>
+
+                    <div class="mt-8 pt-4 border-t border-border">
+                        <p class="text-[10px] uppercase tracking-widest text-secondary-text font-medium mb-3 px-1">Next Session</p>
+                        <div class="bg-hover rounded-xl p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                <span class="text-xs font-semibold">Confirmed</span>
+                            </div>
+                            <p class="text-xs font-semibold text-primary-text">Whole-Body Cryo</p>
+                            <p class="text-[11px] text-secondary-text mt-1">Today · 4:30 PM</p>
+                            <div class="flex items-center gap-2 mt-2 pt-2 border-t border-border">
+                                <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center">
+                                    <i class="fas fa-user-md text-accent text-[10px]"></i>
+                                </div>
+                                <span class="text-[11px] text-secondary-text">Dr. Emily Chen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CONTENT AREA -->
+            <div class="flex-1 min-w-0 overflow-y-auto custom-scrollbar pr-2">
+
+                <!-- ==================== OVERVIEW ==================== -->
+                <div id="overview" class="admin-section">
+                    <div class="dash-card p-5 sm:p-7 reveal active mb-6 bg-accent-gradient text-white">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Welcome back, Marcus ❄️</h2>
+                                <p class="text-white/85 text-sm max-w-xl">You have a Whole-Body Cryo session today at 4:30 PM with Dr. Chen. You're 3 sessions away from unlocking a free recovery add-on.</p>
+                            </div>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider">Apr 09, 2026</span>
+                                <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1">
+                                    <i class="fas fa-circle text-[6px]"></i> Elite Member
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+                        <div class="dash-card p-6 reveal">
+                            <div class="flex justify-between items-start gap-4">
+                                <div>
+                                    <p class="text-secondary-text text-xs uppercase tracking-wider font-medium">Upcoming Sessions</p>
+                                    <p class="text-3xl font-semibold mt-2">3</p>
+                                    <p class="text-accent text-xs font-medium mt-2 flex items-center gap-1">
+                                        <i class="fas fa-clock"></i> Next: Today 4:30 PM
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-calendar-check text-accent text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-border flex gap-4 text-xs">
+                                <span><span class="font-semibold">2</span> <span class="text-secondary-text">this week</span></span>
+                                <span><span class="font-semibold">1</span> <span class="text-secondary-text">next week</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dash-card p-6 reveal">
+                            <div class="flex justify-between items-start gap-4">
+                                <div>
+                                    <p class="text-secondary-text text-xs uppercase tracking-wider font-medium">Package Balance</p>
+                                    <p class="text-3xl font-semibold mt-2">5</p>
+                                    <p class="text-accent text-xs font-medium mt-2 flex items-center gap-1">
+                                        <i class="fas fa-snowflake"></i> Sessions remaining
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-snowflake text-accent text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-border">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 42%"></div></div>
+                                <p class="text-[10px] text-secondary-text mt-1.5 text-center">5 of 12 used</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card p-6 reveal">
+                            <div class="flex justify-between items-start gap-4">
+                                <div>
+                                    <p class="text-secondary-text text-xs uppercase tracking-wider font-medium">Total Sessions</p>
+                                    <p class="text-3xl font-semibold mt-2">48</p>
+                                    <p class="text-accent text-xs font-medium mt-2 flex items-center gap-1">
+                                        <i class="fas fa-arrow-up"></i> +4 this month
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-chart-line text-accent text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-border flex gap-4 text-xs">
+                                <span><span class="font-semibold">36</span> <span class="text-secondary-text">cryo</span></span>
+                                <span><span class="font-semibold">12</span> <span class="text-secondary-text">compression</span></span>
+                            </div>
+                        </div>
+
+                        <div class="dash-card p-6 reveal">
+                            <div class="flex justify-between items-start gap-4">
+                                <div>
+                                    <p class="text-secondary-text text-xs uppercase tracking-wider font-medium">Recovery Streak</p>
+                                    <p class="text-3xl font-semibold mt-2">14<span class="text-base font-normal text-secondary-text"> days</span></p>
+                                    <p class="text-accent text-xs font-medium mt-2 flex items-center gap-1">
+                                        <i class="fas fa-fire"></i> Personal best!
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-fire text-accent text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-border flex gap-4 text-xs">
+                                <span><span class="font-semibold">92%</span> <span class="text-secondary-text">attendance</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div class="dash-card p-6 md:col-span-2 xl:col-span-2 reveal">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="font-semibold text-lg">Next Session Details</h3>
+                                <span class="badge-active text-[10px]">Confirmed</span>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-5 items-start">
+                                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80" alt="Cryo Session" class="w-full sm:w-44 h-32 rounded-2xl object-cover">
+                                <div class="flex-1">
+                                    <p class="font-semibold text-lg">Whole-Body Cryotherapy</p>
+                                    <p class="text-xs text-secondary-text mt-1">Chamber 1 · -140°C target · 2–3 minute exposure</p>
+                                    <div class="grid grid-cols-2 gap-3 mt-4">
+                                        <div>
+                                            <p class="text-[10px] text-secondary-text uppercase tracking-wider">Date</p>
+                                            <p class="text-sm font-semibold">Today, Apr 09</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] text-secondary-text uppercase tracking-wider">Time</p>
+                                            <p class="text-sm font-semibold">4:30 PM</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] text-secondary-text uppercase tracking-wider">Specialist</p>
+                                            <p class="text-sm font-semibold">Dr. Emily Chen</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] text-secondary-text uppercase tracking-wider">Duration</p>
+                                            <p class="text-sm font-semibold">45 min total</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 mt-5">
+                                        <button class="px-4 py-2 btn-primary rounded-full text-xs font-semibold">Check In</button>
+                                        <button class="px-4 py-2 border border-border rounded-full text-xs font-semibold hover:bg-hover">Reschedule</button>
+                                        <button class="px-4 py-2 border border-border rounded-full text-xs font-semibold hover:bg-hover">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/20">
+                                <div class="flex items-start gap-3">
+                                    <i class="fas fa-circle-info text-accent mt-1"></i>
+                                    <div>
+                                        <p class="text-sm font-semibold">Preparation reminder</p>
+                                        <p class="text-xs text-secondary-text mt-1">Please arrive 15 minutes early. Remove all metal jewelry. Bring warm socks and a towel. Avoid lotions on the day of your session.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dash-card p-6 reveal">
+                            <h3 class="font-semibold text-lg mb-4">Recent Activity</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-green-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Session completed</p>
+                                        <p class="text-xs text-secondary-text">Compression therapy · 2 days ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-star text-blue-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Review submitted</p>
+                                        <p class="text-xs text-secondary-text">5★ for Dr. Chen · 3 days ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-calendar-plus text-amber-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Session booked</p>
+                                        <p class="text-xs text-secondary-text">Whole-body cryo · 5 days ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-credit-card text-pink-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Payment processed</p>
+                                        <p class="text-xs text-secondary-text">$85.00 · Visa ··· 4242 · 1 week ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommended services -->
+                    <div class="dash-card p-6 reveal">
+                        <div class="flex justify-between items-center mb-5">
+                            <h3 class="font-semibold text-lg">Recommended For You</h3>
+                            <button onclick="activateSection('booking'); return false;" class="text-xs text-accent font-semibold hover:underline">View All</button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <div class="border border-border rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
+                                <div class="relative h-32 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=500&q=80" alt="Whole Body Cryo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-sm">Whole-Body Cryo</h4>
+                                    <p class="text-xs text-secondary-text mt-1">2–3 min · -140°C chamber</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-accent font-bold">$85<span class="text-xs font-normal text-secondary-text">/session</span></span>
+                                        <button onclick="activateSection('booking'); return false;" class="text-xs btn-primary px-3 py-1.5 font-semibold">Book</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-border rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
+                                <div class="relative h-32 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=500&q=80" alt="Compression" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-sm">Compression Therapy</h4>
+                                    <p class="text-xs text-secondary-text mt-1">Dynamic recovery · 45 min</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-accent font-bold">$45<span class="text-xs font-normal text-secondary-text">/session</span></span>
+                                        <button onclick="activateSection('booking'); return false;" class="text-xs btn-primary px-3 py-1.5 font-semibold">Book</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-border rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
+                                <div class="relative h-32 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=500&q=80" alt="Infrared" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-semibold text-sm">Infrared Sauna</h4>
+                                    <p class="text-xs text-secondary-text mt-1">Deep relaxation · 30 min</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-accent font-bold">$55<span class="text-xs font-normal text-secondary-text">/session</span></span>
+                                        <button onclick="activateSection('booking'); return false;" class="text-xs btn-primary px-3 py-1.5 font-semibold">Book</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== BOOK SESSION ==================== -->
+                <div id="booking" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-calendar-plus text-accent"></i> Book a Session
+                            </h2>
+                            <span class="badge-active text-[10px] px-3 py-1.5 flex items-center gap-1">
+                                <i class="fas fa-snowflake"></i> 5 sessions remaining
+                            </span>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Service Type</label>
+                                <select class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    <option>Whole-Body Cryotherapy — $85</option>
+                                    <option>Localized Cryo — $65</option>
+                                    <option>Compression Therapy — $45</option>
+                                    <option>Infrared Sauna — $55</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Specialist (optional)</label>
+                                <select class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    <option>No preference</option>
+                                    <option>Dr. Emily Chen</option>
+                                    <option>Coach Diego Rivera</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Date</label>
+                                <input type="date" class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Preferred Time</label>
+                                <select class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    <option>9:30 AM — Available</option>
+                                    <option>10:30 AM — Available</option>
+                                    <option>12:00 PM — Available</option>
+                                    <option>4:30 PM — Available</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-hover rounded-2xl p-5 mb-6">
+                            <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-3">Special Requests</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-accent"> Preferred music</label>
+                                <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-accent"> Guided breathing</label>
+                                <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-accent"> Post-session massage</label>
+                            </div>
+                            <div class="mt-4">
+                                <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Notes for specialist</label>
+                                <textarea class="w-full bg-background border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition" rows="3" placeholder="Any injuries, recovery goals, or preferences..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="bg-accent/5 border border-accent/20 rounded-2xl p-5 mb-6">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-circle-info text-accent mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-semibold">Session price: <span class="text-accent text-lg">$85.00</span></p>
+                                    <p class="text-xs text-secondary-text mt-1">Your Elite membership covers this session — no additional charge. Cancel free up to 12 hours in advance.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full py-4 btn-primary rounded-full text-sm font-semibold uppercase tracking-widest shadow-lg">
+                            <i class="fas fa-paper-plane mr-2"></i> Confirm Booking
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================== MY SESSIONS ==================== -->
+                <div id="sessions" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-calendar-check text-accent"></i> My Sessions
+                            </h2>
+                            <button onclick="activateSection('booking'); return false;" class="px-5 py-2.5 btn-primary rounded-full text-xs font-semibold uppercase tracking-widest shadow-md">
+                                <i class="fas fa-plus mr-1"></i> Book New
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">3</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Upcoming</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">48</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Completed</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">5</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Remaining</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">92%</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Attendance</p>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Upcoming Sessions</h3>
+                        <div class="space-y-3 mb-8">
+                            <div class="dash-card p-4 flex flex-col sm:flex-row gap-4">
+                                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80" alt="Cryo" class="w-full sm:w-32 h-24 rounded-xl object-cover">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                                        <p class="font-semibold text-sm">Whole-Body Cryotherapy</p>
+                                        <span class="badge-active text-[10px]">Confirmed</span>
+                                    </div>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-calendar mr-1"></i> Today, Apr 09 · 4:30 PM</p>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-user-md mr-1"></i> Dr. Emily Chen · Chamber 1</p>
+                                    <div class="flex justify-between items-center mt-3 flex-wrap gap-2">
+                                        <span class="text-sm font-bold text-accent">$85 · Covered by membership</span>
+                                        <div class="flex gap-2">
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Reschedule</button>
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dash-card p-4 flex flex-col sm:flex-row gap-4">
+                                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=400&q=80" alt="Compression" class="w-full sm:w-32 h-24 rounded-xl object-cover">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                                        <p class="font-semibold text-sm">Compression Therapy</p>
+                                        <span class="badge-confirmed text-[10px]">Scheduled</span>
+                                    </div>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-calendar mr-1"></i> Apr 12 · 10:00 AM</p>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-user-md mr-1"></i> Coach Diego Rivera</p>
+                                    <div class="flex justify-between items-center mt-3 flex-wrap gap-2">
+                                        <span class="text-sm font-bold text-accent">$45 · Covered by membership</span>
+                                        <div class="flex gap-2">
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Reschedule</button>
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dash-card p-4 flex flex-col sm:flex-row gap-4">
+                                <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=400&q=80" alt="Infrared" class="w-full sm:w-32 h-24 rounded-xl object-cover">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                                        <p class="font-semibold text-sm">Infrared Sauna</p>
+                                        <span class="badge-confirmed text-[10px]">Scheduled</span>
+                                    </div>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-calendar mr-1"></i> Apr 15 · 6:00 PM</p>
+                                    <p class="text-xs text-secondary-text mt-1"><i class="fas fa-user-md mr-1"></i> Dr. Emily Chen</p>
+                                    <div class="flex justify-between items-center mt-3 flex-wrap gap-2">
+                                        <span class="text-sm font-bold text-accent">$55 · Covered by membership</span>
+                                        <div class="flex gap-2">
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Reschedule</button>
+                                            <button class="px-3 py-1.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Recent Sessions</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 07, 2026 · Compression Therapy</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="badge-completed text-[10px]">Completed</span>
+                                    <span class="text-xs text-secondary-text">45 min</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 04, 2026 · Whole-Body Cryo</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="badge-completed text-[10px]">Completed</span>
+                                    <span class="text-xs text-secondary-text">3 min</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 01, 2026 · Localized Cryo (Right Knee)</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="badge-completed text-[10px]">Completed</span>
+                                    <span class="text-xs text-secondary-text">15 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SESSION HISTORY ==================== -->
+                <div id="history" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-clock-rotate-left text-accent"></i> Session History
+                            </h2>
+                            <button class="px-5 py-2.5 border border-border rounded-full text-xs font-semibold hover:bg-hover">
+                                <i class="fas fa-download mr-1"></i> Export
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">48</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Total Sessions</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">36h</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Time in Recovery</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">92%</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Attendance</p>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-4 text-center">
+                                <p class="text-2xl font-semibold text-accent">$3,840</p>
+                                <p class="text-[10px] text-secondary-text uppercase tracking-wider mt-1">Lifetime Value</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
+                                        <th>Specialist</th>
+                                        <th>Duration</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Apr 07, 2026</td>
+                                        <td class="text-xs">Compression Therapy</td>
+                                        <td class="text-xs text-secondary-text">Coach Rivera</td>
+                                        <td class="text-xs">45 min</td>
+                                        <td class="font-bold text-sm">$45</td>
+                                        <td><span class="badge-completed text-[10px]">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Apr 04, 2026</td>
+                                        <td class="text-xs">Whole-Body Cryo</td>
+                                        <td class="text-xs text-secondary-text">Dr. Chen</td>
+                                        <td class="text-xs">3 min</td>
+                                        <td class="font-bold text-sm">$85</td>
+                                        <td><span class="badge-completed text-[10px]">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Apr 01, 2026</td>
+                                        <td class="text-xs">Localized Cryo (Right Knee)</td>
+                                        <td class="text-xs text-secondary-text">Dr. Chen</td>
+                                        <td class="text-xs">15 min</td>
+                                        <td class="font-bold text-sm">$65</td>
+                                        <td><span class="badge-completed text-[10px]">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Mar 28, 2026</td>
+                                        <td class="text-xs">Whole-Body Cryo</td>
+                                        <td class="text-xs text-secondary-text">Dr. Chen</td>
+                                        <td class="text-xs">3 min</td>
+                                        <td class="font-bold text-sm">$85</td>
+                                        <td><span class="badge-completed text-[10px]">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Mar 25, 2026</td>
+                                        <td class="text-xs">Infrared Sauna</td>
+                                        <td class="text-xs text-secondary-text">Dr. Chen</td>
+                                        <td class="text-xs">30 min</td>
+                                        <td class="font-bold text-sm">$55</td>
+                                        <td><span class="badge-completed text-[10px]">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-xs text-secondary-text">Mar 22, 2026</td>
+                                        <td class="text-xs">Compression Therapy</td>
+                                        <td class="text-xs text-secondary-text">Coach Rivera</td>
+                                        <td class="text-xs">45 min</td>
+                                        <td class="font-bold text-sm">$45</td>
+                                        <td><span class="badge-cancelled text-[10px]">Cancelled</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== RECOVERY PROGRESS ==================== -->
+                <div id="progress" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-chart-line text-accent"></i> Recovery Progress
+                            </h2>
+                            <select class="bg-hover border border-border rounded-full px-4 py-2 text-xs font-medium">
+                                <option>Last 30 Days</option>
+                                <option>Last 90 Days</option>
+                                <option>This Year</option>
+                            </select>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-fire text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Recovery Streak</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-accent">14 days</p>
+                                <p class="text-xs text-secondary-text mt-2">Your personal best — keep going!</p>
+                            </div>
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-heart-pulse text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Inflammation Index</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-green-500">-42%</p>
+                                <p class="text-xs text-secondary-text mt-2">Since starting cryo therapy</p>
+                            </div>
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-bolt text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Energy Level</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-accent">8.5 / 10</p>
+                                <p class="text-xs text-secondary-text mt-2">Self-reported average</p>
+                            </div>
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-bed text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Sleep Quality</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-accent">+28%</p>
+                                <p class="text-xs text-secondary-text mt-2">Improved since first session</p>
+                            </div>
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-dumbbell text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Workout Recovery</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-accent">-35%</p>
+                                <p class="text-xs text-secondary-text mt-2">Faster recovery time</p>
+                            </div>
+                            <div class="dash-card p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-smile text-accent text-xl"></i>
+                                    <p class="font-semibold text-sm">Mood & Focus</p>
+                                </div>
+                                <p class="text-3xl font-semibold text-accent">9.2 / 10</p>
+                                <p class="text-xs text-secondary-text mt-2">Post-session average</p>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Progress Charts</h3>
+                        <div class="dash-card p-6">
+                            <h4 class="font-semibold text-sm mb-4">Weekly Session Attendance</h4>
+                            <div class="h-48 flex items-end justify-between gap-2">
+                                <div class="flex-1 flex flex-col items-center gap-2">
+                                    <div class="w-full rounded-t-md" style="height: 60px; width: 70%; background: linear-gradient(180deg, #06b6d4, #0369a1);"></div>
+                                    <span class="text-xs text-secondary-text">W1</span>
+                                </div>
+                                <div class="flex-1 flex flex-col items-center gap-2">
+                                    <div class="w-full rounded-t-md" style="height: 80px; width: 85%; background: linear-gradient(180deg, #06b6d4, #0369a1);"></div>
+                                    <span class="text-xs text-secondary-text">W2</span>
+                                </div>
+                                <div class="flex-1 flex flex-col items-center gap-2">
+                                    <div class="w-full rounded-t-md" style="height: 95px; width: 92%; background: linear-gradient(180deg, #06b6d4, #0369a1);"></div>
+                                    <span class="text-xs text-secondary-text">W3</span>
+                                </div>
+                                <div class="flex-1 flex flex-col items-center gap-2">
+                                    <div class="w-full rounded-t-md" style="height: 105px; width: 100%; background: linear-gradient(180deg, #06b6d4, #0369a1);"></div>
+                                    <span class="text-xs text-secondary-text">W4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== MY MEMBERSHIP ==================== -->
+                <div id="membership" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-id-card text-accent"></i> My Membership
+                            </h2>
+                            <span class="badge-active text-[10px] px-3 py-1.5">Active</span>
+                        </div>
+
+                        <!-- Current plan -->
+                        <div class="bg-accent-gradient rounded-2xl p-6 sm:p-8 text-white mb-8">
+                            <div class="flex justify-between items-start flex-wrap gap-4">
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase tracking-wider font-semibold">Current Plan</p>
+                                    <p class="text-3xl font-semibold mt-1">Elite Unlimited</p>
+                                    <p class="text-white/85 text-sm mt-2">Unlimited cryo + infrared sauna + priority booking</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white/70 text-xs uppercase tracking-wider">Monthly</p>
+                                    <p class="text-3xl font-semibold">$299</p>
+                                    <p class="text-white/70 text-xs mt-1">Renews May 09, 2026</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-5 border-t border-white/20">
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase">Member Since</p>
+                                    <p class="font-semibold">Jan 2025</p>
+                                </div>
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase">Total Sessions</p>
+                                    <p class="font-semibold">48</p>
+                                </div>
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase">Savings</p>
+                                    <p class="font-semibold">$1,240</p>
+                                </div>
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase">Next Renewal</p>
+                                    <p class="font-semibold">May 09</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Your Benefits</h3>
+                        <div class="grid md:grid-cols-2 gap-4 mb-8">
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">Unlimited cryo sessions</p>
+                                    <p class="text-xs text-secondary-text mt-1">No daily limits. Book as often as you need.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">Infrared sauna access</p>
+                                    <p class="text-xs text-secondary-text mt-1">Full access to all sauna sessions.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">Priority booking</p>
+                                    <p class="text-xs text-secondary-text mt-1">First access to peak-time slots.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">Dedicated specialist</p>
+                                    <p class="text-xs text-secondary-text mt-1">Same expert every session for continuity.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">Guest passes</p>
+                                    <p class="text-xs text-secondary-text mt-1">2 free guest passes per month.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 bg-hover rounded-2xl">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-sm">15% retail discount</p>
+                                    <p class="text-xs text-secondary-text mt-1">Save on supplements and recovery gear.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button class="px-6 py-3 btn-primary rounded-full text-xs font-semibold uppercase tracking-widest shadow-md flex-1 sm:flex-initial">Renew Membership</button>
+                            <button class="px-6 py-3 btn-outline rounded-full text-xs font-semibold uppercase tracking-widest flex-1 sm:flex-initial">Upgrade Plan</button>
+                            <button class="px-6 py-3 border border-border rounded-full text-xs font-semibold uppercase tracking-widest hover:bg-hover flex-1 sm:flex-initial">Manage Subscription</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PAYMENTS ==================== -->
+                <div id="payments" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-primary-text flex items-center gap-2">
+                                <i class="fas fa-credit-card text-accent"></i> Payments & Billing
+                            </h2>
+                            <button class="px-5 py-2.5 btn-primary rounded-full text-xs font-semibold uppercase tracking-widest shadow-md">
+                                <i class="fas fa-plus mr-1"></i> Add Card
+                            </button>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-accent-gradient rounded-2xl p-6 text-white">
+                                <p class="text-white/70 text-xs uppercase tracking-wider font-semibold">Next Payment</p>
+                                <p class="text-4xl font-semibold mt-1">$299.00</p>
+                                <p class="text-white/70 text-xs mt-2">Due May 09, 2026 · Elite Membership</p>
+                                <button class="mt-4 bg-white text-accent font-bold px-6 py-2.5 rounded-full text-xs uppercase tracking-widest hover:scale-105 transition">
+                                    Pay Now
+                                </button>
+                            </div>
+                            <div class="dash-card p-6">
+                                <p class="text-secondary-text text-xs uppercase tracking-wider font-semibold mb-4">This Year's Investment</p>
+                                <div class="flex items-baseline gap-3">
+                                    <p class="text-4xl font-semibold text-accent">$3,840</p>
+                                    <span class="text-sm text-accent flex items-center gap-1"><i class="fas fa-arrow-up"></i> +12%</span>
+                                </div>
+                                <div class="mt-5 pt-4 border-t border-border grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-xs text-secondary-text">Sessions</p>
+                                        <p class="font-semibold text-base">48</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-secondary-text">Avg. per Session</p>
+                                        <p class="font-semibold text-base">$80</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Saved Payment Methods</h3>
+                        <div class="space-y-3 mb-8">
+                            <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                <div class="flex items-center gap-4">
+                                    <i class="fab fa-cc-visa text-3xl text-accent"></i>
+                                    <div>
+                                        <p class="font-semibold text-sm">Visa ending in 4242</p>
+                                        <p class="text-xs text-secondary-text">Expires 08/2028</p>
+                                    </div>
+                                </div>
+                                <span class="badge-active text-[10px]">Default</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                <div class="flex items-center gap-4">
+                                    <i class="fab fa-cc-mastercard text-3xl text-accent"></i>
+                                    <div>
+                                        <p class="font-semibold text-sm">Mastercard ending in 8890</p>
+                                        <p class="text-xs text-secondary-text">Expires 11/2027</p>
+                                    </div>
+                                </div>
+                                <button class="text-secondary-text hover:text-accent p-2"><i class="fas fa-ellipsis-vertical"></i></button>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Recent Transactions</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 07, 2026 · Compression Therapy</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-semibold">$45.00</span>
+                                    <span class="badge-completed text-[10px]">Covered</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 04, 2026 · Whole-Body Cryo</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-semibold">$85.00</span>
+                                    <span class="badge-completed text-[10px]">Covered</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Apr 09, 2026 · Elite Membership</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-semibold">$299.00</span>
+                                    <span class="badge-completed text-[10px]">Paid</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-hover rounded-xl text-sm">
+                                <span>Mar 09, 2026 · Elite Membership</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-semibold">$299.00</span>
+                                    <span class="badge-completed text-[10px]">Paid</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SUPPORT ==================== -->
+                <div id="support" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <h2 class="text-xl sm:text-2xl font-semibold text-primary-text mb-2 flex items-center gap-2">
+                            <i class="fas fa-headset text-accent"></i> Help & Support
+                        </h2>
+                        <p class="text-secondary-text text-sm mb-8">Our team is here 24/7 to help you with bookings, recovery questions, or anything else.</p>
+
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-hover rounded-2xl p-6 text-center">
+                                <div class="w-14 h-14 mx-auto bg-accent/10 rounded-full flex items-center justify-center text-accent text-2xl mb-4">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h3 class="font-semibold text-lg mb-2">Client Support Line</h3>
+                                <p class="text-sm text-secondary-text mb-4">Speak to a real person during studio hours.</p>
+                                <a href="tel:+18005550199" class="text-accent font-semibold">+1 (800) 555-0199</a>
+                            </div>
+                            <div class="bg-hover rounded-2xl p-6 text-center">
+                                <div class="w-14 h-14 mx-auto bg-accent/10 rounded-full flex items-center justify-center text-accent text-2xl mb-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3 class="font-semibold text-lg mb-2">Email Support</h3>
+                                <p class="text-sm text-secondary-text mb-4">We respond within 2 hours during business hours.</p>
+                                <a href="mailto:members@cryowellness.com" class="text-accent font-semibold">members@cryowellness.com</a>
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-4">Frequently Asked Questions</h3>
+                        <div class="space-y-3">
+                            <details class="bg-hover rounded-2xl p-4 cursor-pointer">
+                                <summary class="font-semibold text-sm">How do I reschedule or cancel a session?</summary>
+                                <p class="text-xs text-secondary-text mt-3">You can reschedule or cancel free of charge up to 12 hours before your session from the "My Sessions" tab. Late cancellations incur a $25 fee.</p>
+                            </details>
+                            <details class="bg-hover rounded-2xl p-4 cursor-pointer">
+                                <summary class="font-semibold text-sm">What should I wear for a cryo session?</summary>
+                                <p class="text-xs text-secondary-text mt-3">Bring warm socks, gloves, and a towel. Remove all metal jewelry before entering the chamber. We provide protective footwear and gloves.</p>
+                            </details>
+                            <details class="bg-hover rounded-2xl p-4 cursor-pointer">
+                                <summary class="font-semibold text-sm">Is cryotherapy safe for everyone?</summary>
+                                <p class="text-xs text-secondary-text mt-3">Cryo is safe for most people, but not recommended for those with certain heart conditions, severe hypertension, or pregnancy. Please consult with our team for a personal assessment.</p>
+                            </details>
+                            <details class="bg-hover rounded-2xl p-4 cursor-pointer">
+                                <summary class="font-semibold text-sm">How many sessions should I do per week?</summary>
+                                <p class="text-xs text-secondary-text mt-3">Most members see best results with 2–3 sessions per week. Your specialist will recommend a personalized schedule based on your goals.</p>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SETTINGS ==================== -->
+                <div id="settings" class="admin-section hidden">
+                    <div class="dash-card p-5 sm:p-7 reveal active">
+                        <h2 class="text-xl sm:text-2xl font-semibold text-primary-text mb-8 flex items-center gap-2">
+                            <i class="fas fa-sliders text-accent"></i> Account Settings
+                        </h2>
+
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-4 pb-2 border-b border-border">Personal Information</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Full Name</label>
+                                        <input type="text" value="Marcus Reed" class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Email</label>
+                                        <input type="email" value="marcus.reed@example.com" class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Phone</label>
+                                        <input type="tel" value="+1 (555) 234-5678" class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs uppercase tracking-wider font-semibold text-secondary-text block mb-2">Date of Birth</label>
+                                        <input type="date" value="1985-06-15" class="w-full bg-hover border border-border rounded-xl px-4 py-3 text-primary-text outline-none focus:border-accent transition">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold text-lg mb-4 pb-2 border-b border-border">Recovery Preferences</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                        <div>
+                                            <p class="font-semibold text-sm">Session reminders</p>
+                                            <p class="text-xs text-secondary-text mt-1">Receive SMS and email reminders before each session</p>
+                                        </div>
+                                        <div class="toggle-switch active" onclick="this.classList.toggle('active'); this.classList.toggle('inactive');">
+                                            <div class="knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                        <div>
+                                            <p class="font-semibold text-sm">Recovery tips & insights</p>
+                                            <p class="text-xs text-secondary-text mt-1">Weekly articles on optimizing recovery</p>
+                                        </div>
+                                        <div class="toggle-switch active" onclick="this.classList.toggle('active'); this.classList.toggle('inactive');">
+                                            <div class="knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                        <div>
+                                            <p class="font-semibold text-sm">Progress tracking</p>
+                                            <p class="text-xs text-secondary-text mt-1">Share anonymous progress data with your specialist</p>
+                                        </div>
+                                        <div class="toggle-switch active" onclick="this.classList.toggle('active'); this.classList.toggle('inactive');">
+                                            <div class="knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between p-4 bg-hover rounded-2xl">
+                                        <div>
+                                            <p class="font-semibold text-sm">Membership offers</p>
+                                            <p class="text-xs text-secondary-text mt-1">Exclusive discounts and new service announcements</p>
+                                        </div>
+                                        <div class="toggle-switch inactive" onclick="this.classList.toggle('active'); this.classList.toggle('inactive');">
+                                            <div class="knob"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 flex gap-4">
+                                <button class="btn-primary px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl">Save Changes</button>
+                                <button class="btn-outline px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== LOGOUT ==================== -->
+                <div id="logout" class="admin-section hidden">
+                    <div class="dash-card p-10 reveal active text-center max-w-lg mx-auto border-red-500/20">
+                        <div class="w-20 h-20 mx-auto bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center text-red-500 text-3xl mb-6">
+                            <i class="fas fa-door-open"></i>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-primary-text">Log out of CryoWellness?</h2>
+                        <p class="text-secondary-text mt-3 text-sm leading-relaxed">You will need to sign in again to access your sessions and recovery tracking.</p>
+                        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="login.html">
+                                <button class="bg-red-500 hover:bg-red-600 text-white font-bold uppercase tracking-widest px-8 py-3 rounded-full text-[10px] transition shadow-lg shadow-red-200 dark:shadow-none">
+                                    Log Out
+                                </button>
+                            </a>
+                            <button onclick="activateSection('overview'); return false;" class="bg-hover border border-border px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRUST BANNER -->
+                <div class="bg-accent-gradient rounded-3xl p-6 sm:p-8 mt-10 text-white reveal flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+                    <div class="flex items-center gap-4 text-center sm:text-left">
+                        <span class="w-3 h-3 bg-white rounded-full animate-ping flex-shrink-0"></span>
+                        <div>
+                            <p class="font-semibold text-lg tracking-tight">Recover Faster, Perform Stronger</p>
+                            <p class="text-xs text-white/85">Studio-grade cryotherapy · Expert specialists · Real-time recovery tracking</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="bg-white/20 backdrop-blur-md px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest">Elite Member Benefits</span>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <footer class="mt-12 text-center text-[10px] text-secondary-text border-t border-border pt-8 pb-12 w-full">
+                    <p class="uppercase tracking-[0.3em] font-semibold opacity-40">© 2026 Cryotherapy & Recovery Wellness Studio · Client Dashboard v1.0</p>
+                    <div class="flex justify-center gap-8 mt-4 font-semibold uppercase opacity-60 flex-wrap">
+                        <span class="hover:text-accent cursor-pointer transition">Privacy</span>
+                        <span class="hover:text-accent cursor-pointer transition">Terms</span>
+                        <span class="hover:text-accent cursor-pointer transition">Safety</span>
+                        <span class="hover:text-accent cursor-pointer transition">Contact</span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE DRAWER -->
+    <div id="mobile-menu-drawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+        <div id="drawer-backdrop" class="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+        <div id="drawer-content" class="absolute top-0 left-0 right-0 bg-background rounded-b-2xl shadow-2xl p-6 xl:hidden max-h-[85vh] overflow-y-auto transform translate-y-[-100%] transition-transform duration-300 ease-out">
+            <div class="flex justify-between items-center pb-4 border-b border-border">
+                <a href="index.html" class="text-2xl font-serif font-extrabold tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-snowflake text-accent"></i>
+                    <span class="text-accent">CRYOWELLNESS</span>
+                </a>
+                <button id="mobile-menu-close" class="text-primary-text hover:text-accent"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            <nav class="flex flex-col space-y-2 py-4">
+                <p class="text-[10px] uppercase tracking-widest text-secondary-text font-bold mt-2 mb-1">My Recovery</p>
+                <a href="#" onclick="activateSection('overview'); return false;" class="block text-primary-text font-semibold text-lg py-2">Dashboard Home</a>
+                <a href="#" onclick="activateSection('booking'); return false;" class="block text-primary-text font-semibold text-lg py-2">Book Session</a>
+                <a href="#" onclick="activateSection('sessions'); return false;" class="block text-primary-text font-semibold text-lg py-2">My Sessions</a>
+
+                <p class="text-[10px] uppercase tracking-widest text-secondary-text font-bold mt-4 mb-1">History</p>
+                <a href="#" onclick="activateSection('history'); return false;" class="block text-primary-text font-semibold text-lg py-2">Session History</a>
+                <a href="#" onclick="activateSection('progress'); return false;" class="block text-primary-text font-semibold text-lg py-2">Recovery Progress</a>
+
+                <p class="text-[10px] uppercase tracking-widest text-secondary-text font-bold mt-4 mb-1">Account</p>
+                <a href="#" onclick="activateSection('membership'); return false;" class="block text-primary-text font-semibold text-lg py-2">My Membership</a>
+                <a href="#" onclick="activateSection('payments'); return false;" class="block text-primary-text font-semibold text-lg py-2">Payments</a>
+                <a href="#" onclick="activateSection('support'); return false;" class="block text-primary-text font-semibold text-lg py-2">Help & Support</a>
+                <a href="#" onclick="activateSection('settings'); return false;" class="block text-primary-text font-semibold text-lg py-2">Settings</a>
+                <a href="#" onclick="activateSection('logout'); return false;" class="block text-red-500 font-semibold text-lg py-2">Log Out</a>
+            </nav>
+            <div class="pt-4 border-t border-border mt-4 flex justify-around items-center">
+                <button id="mobile-lang-icon-drawer" class="flex flex-col items-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg><span class="text-xs mt-1 text-secondary-text">RTL</span></button>
+                <button id="drawer-theme-toggle" class="flex flex-col items-center">
+                    <svg class="w-6 h-6 light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="w-6 h-6 dark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <span class="text-xs mt-1 text-secondary-text">Theme</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const html = document.documentElement;
+
+            // Sidebar
+            const sidebar = document.getElementById('sidebar-container');
+            const overlay = document.getElementById('mobile-overlay');
+
+            window.toggleMobileMenu = function(isOpen) {
+                if (isOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            };
+            document.getElementById('mobile-menu-toggle')?.addEventListener('click', () => toggleMobileMenu(true));
+            document.getElementById('close-sidebar')?.addEventListener('click', () => toggleMobileMenu(false));
+            overlay?.addEventListener('click', () => toggleMobileMenu(false));
+
+            // Mobile drawer
+            const menuDrawer = document.getElementById('mobile-menu-drawer');
+            const menuContent = document.getElementById('drawer-content');
+            const menuBackdrop = document.getElementById('drawer-backdrop');
+            window.closeDrawer = () => {
+                menuContent.classList.add('translate-y-[-100%]');
+                menuBackdrop.classList.remove('opacity-50', 'pointer-events-auto');
+                setTimeout(() => { menuDrawer.classList.add('pointer-events-none'); document.body.style.overflow = ''; }, 300);
+            };
+
+            // Theme
+            const themeToggles = [document.getElementById('theme-toggle-user'), document.getElementById('drawer-theme-toggle')];
+            const applyTheme = (theme) => {
+                html.setAttribute('data-theme', theme);
+                document.querySelectorAll('.light-icon').forEach(i => i.classList.toggle('hidden', theme === 'dark'));
+                document.querySelectorAll('.dark-icon').forEach(i => i.classList.toggle('hidden', theme === 'light'));
+            };
+            themeToggles.forEach(btn => {
+                btn?.addEventListener('click', () => {
+                    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('theme', next);
+                    applyTheme(next);
+                });
+            });
+            applyTheme(localStorage.getItem('theme') || 'light');
+
+            // RTL
+            const langToggles = [document.getElementById('lang-toggle'), document.getElementById('mobile-lang-icon-drawer')];
+            langToggles.forEach(btn => btn?.addEventListener('click', () => {
+                const current = localStorage.getItem('language') === 'ar' ? 'en' : 'ar';
+                localStorage.setItem('language', current);
+                html.setAttribute('dir', current === 'ar' ? 'rtl' : 'ltr');
+            }));
+            html.setAttribute('dir', localStorage.getItem('language') === 'ar' ? 'rtl' : 'ltr');
+
+            // Section switching
+            const sections = ['overview', 'booking', 'sessions', 'history', 'progress', 'membership', 'payments', 'support', 'settings', 'logout'];
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+            window.activateSection = function (sectionId) {
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+                const activeEl = document.getElementById(sectionId);
+                if (activeEl) {
+                    activeEl.classList.remove('hidden');
+                    activeEl.classList.add('active');
+                }
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.section === sectionId) link.classList.add('active');
+                });
+                if (window.innerWidth < 1280) {
+                    toggleMobileMenu(false);
+                    closeDrawer();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (this.dataset.section) activateSection(this.dataset.section);
+                });
+            });
+
+            // Reveal
+            function checkReveal() {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
+                });
+            }
+            window.addEventListener('scroll', checkReveal);
+            window.addEventListener('load', checkReveal);
+
+            activateSection('overview');
+        })();
+    </script>
+</body>
+</html>
+
+
+
+
+
+

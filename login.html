@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/fav.png" type="image/jpeg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Sign In | CryoWellness</title>
+
+    <script src="tailwind.js"></script>
+    <style>
+        /* --- Modern Ice Blue Palette (matches index.html) --- */
+        :root, html[data-theme='light'] {
+            --color-background: #FFFFFF;
+            --color-primary-text: #1E293B;
+            --color-secondary-text: #475569;
+            --color-accent: #06b6d4;
+            --color-accent-light: #cffafe;
+            --color-border: #E2E8F0;
+            --color-hover: #F8FAFC;
+            --color-footer-bg: #0F172A;
+            --color-footer-text: #F1F5F9;
+        }
+        html[data-theme='dark'] {
+            --color-background: #020617;
+            --color-primary-text: #F8FAFC;
+            --color-secondary-text: #94A3B8;
+            --color-accent: #22d3ee;
+            --color-accent-light: #164e63;
+            --color-border: #1E293B;
+            --color-hover: #0F172A;
+            --color-footer-bg: #020617;
+            --color-footer-text: #F8FAFC;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-primary-text);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        .text-primary-text { color: var(--color-primary-text); }
+        .text-secondary-text { color: var(--color-secondary-text); }
+        .text-accent { color: var(--color-accent); }
+        .bg-background { background-color: var(--color-background); }
+        .bg-hover { background-color: var(--color-hover); }
+        .border-border { border-color: var(--color-border); }
+
+        h1, h2, h3, h4, h5, h6 { font-weight: 500 !important; }
+        p { font-weight: 400 !important; }
+
+        .bg-custom-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+        }
+
+        .btn-primary, .book-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary:hover, .book-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 6px 18px rgba(6, 182, 212, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25);
+        }
+
+        /* Floating controls */
+        .controls {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 50;
+        }
+        html[dir="rtl"] .controls { right: auto; left: 1rem; }
+
+        .btn-control {
+            width: 42px; height: 42px;
+            border-radius: 14px;
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--color-primary-text);
+        }
+        .btn-control:hover {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+            transform: translateY(-1px);
+        }
+
+        /* Split layout */
+        .auth-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+        html[dir="rtl"] .auth-wrapper { direction: rtl; }
+
+        /* LEFT — Visual panel */
+        .visual-panel {
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+        }
+        .visual-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+            z-index: 0;
+        }
+        .visual-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .visual-panel .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Decorative snowflakes */
+        .snowflake {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+            z-index: 2;
+            animation: float 20s ease-in-out infinite;
+        }
+        .snowflake-1 { font-size: 220px; top: -60px; right: -60px; }
+        .snowflake-2 { font-size: 160px; bottom: -40px; left: -40px; animation-delay: -8s; }
+        .snowflake-3 { font-size: 100px; top: 40%; right: 10%; opacity: 0.05; animation-delay: -15s; }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, -30px) rotate(15deg); }
+        }
+
+        .visual-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 2.5rem;
+        }
+        .visual-logo-icon {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.4rem;
+            transition: transform 0.4s ease;
+        }
+        .visual-logo:hover .visual-logo-icon { transform: rotate(-15deg) scale(1.08); }
+        .visual-logo-text {
+            font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+            font-weight: 800;
+            font-size: 1.55rem;
+            letter-spacing: 0.02em;
+        }
+
+        .visual-headline {
+            font-family: ui-serif, Georgia, serif;
+            font-weight: 600;
+            font-size: 2.4rem;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+        .visual-headline span {
+            color: #cffafe;
+            font-style: italic;
+        }
+        .visual-subtext {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            max-width: 380px;
+            margin-bottom: 2.5rem;
+        }
+
+        .visual-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .visual-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            font-size: 0.88rem;
+        }
+        .visual-feature i {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 0.72rem;
+            flex-shrink: 0;
+        }
+
+        .visual-stats {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .visual-stat-value {
+            font-family: ui-serif, Georgia, serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .visual-stat-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            margin-top: 0.4rem;
+        }
+
+        /* RIGHT — Form panel */
+        .form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            background: var(--color-background);
+            overflow-y: auto;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mobile-logo {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--color-accent);
+        }
+        .mobile-logo i {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+            color: white;
+            font-size: 1.1rem;
+        }
+        .mobile-logo span {
+            font-family: ui-serif, Georgia, serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+        }
+
+        .form-heading {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-heading .eyebrow {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.7rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(6, 182, 212, 0.1);
+        }
+        .form-heading h1 {
+            font-family: ui-serif, Georgia, serif;
+            font-weight: 600;
+            font-size: 2rem;
+            color: var(--color-primary-text);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .form-heading p {
+            font-size: 0.9rem;
+            color: var(--color-secondary-text);
+            line-height: 1.5;
+        }
+
+        /* Fields */
+        .field {
+            margin-bottom: 1.1rem;
+        }
+        .field-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-secondary-text);
+            margin-bottom: 0.5rem;
+        }
+        .field-wrapper {
+            position: relative;
+        }
+        .field-wrapper i.field-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-secondary-text);
+            font-size: 0.85rem;
+            pointer-events: none;
+            transition: color 0.2s ease;
+            z-index: 1;
+        }
+        html[dir="rtl"] .field-wrapper i.field-icon { left: auto; right: 1rem; }
+
+        .input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.7rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: var(--color-background);
+            border: 1.5px solid var(--color-border);
+            color: var(--color-primary-text);
+            outline: none;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        html[dir="rtl"] .input { padding: 0.85rem 2.7rem 0.85rem 1rem; }
+        .input::placeholder { color: var(--color-secondary-text); opacity: 0.6; }
+        .input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.14);
+        }
+        .input:focus ~ i.field-icon { color: var(--color-accent); }
+
+        .btn-password-toggle {
+            position: absolute;
+            right: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-secondary-text);
+            font-size: 0.85rem;
+            padding: 0.35rem;
+            transition: color 0.2s ease;
+        }
+        html[dir="rtl"] .btn-password-toggle { right: auto; left: 0.9rem; }
+        .btn-password-toggle:hover { color: var(--color-accent); }
+        .input.with-toggle { padding-right: 2.7rem; }
+        html[dir="rtl"] .input.with-toggle { padding-right: 2.7rem; padding-left: 2.7rem; }
+
+        /* Form row */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.82rem;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--color-secondary-text);
+        }
+        .checkbox-label input {
+            width: 15px; height: 15px;
+            accent-color: var(--color-accent);
+            cursor: pointer;
+        }
+        .forgot-link {
+            font-weight: 600;
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .forgot-link:hover { opacity: 0.75; text-decoration: underline; }
+
+        /* Submit */
+        .btn-submit {
+            width: 100%;
+            padding: 0.95rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%);
+            box-shadow: 0 10px 25px -8px rgba(6, 182, 212, 0.55);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -8px rgba(6, 182, 212, 0.65);
+        }
+        .btn-submit:active { transform: translateY(0); }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin: 1.75rem 0 1.25rem;
+            color: var(--color-secondary-text);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.75;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--color-border), transparent);
+        }
+
+        /* Social */
+        .social-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.7rem;
+            margin-bottom: 1.75rem;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: var(--color-background);
+            border: 1.5px solid var(--color-border);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .social-btn:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -6px rgba(6, 182, 212, 0.3);
+        }
+        .social-btn svg { width: 20px; height: 20px; }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--color-secondary-text);
+        }
+        .footer-note a {
+            font-weight: 700;
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+        .footer-note a:hover { text-decoration: underline; }
+
+        .demo-hint {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--color-secondary-text);
+        }
+        .demo-hint i { color: var(--color-accent); margin-right: 0.35rem; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .auth-wrapper { grid-template-columns: 1fr; }
+            html[dir="rtl"] .auth-wrapper { grid-template-columns: 1fr; }
+            .visual-panel { display: none; }
+            .mobile-logo { display: flex; }
+            .form-panel { padding: 2rem 1.25rem; }
+            .form-heading h1 { font-size: 1.7rem; }
+        }
+
+        /* Tighter mobile layout for screens <= 480px */
+        @media (max-width: 480px) {
+            .form-panel { padding: 1rem 1rem; }
+            .controls { top: 0.75rem; right: 0.75rem; gap: 0.35rem; }
+            .btn-control { width: 36px; height: 36px; border-radius: 10px; }
+            .mobile-logo { margin-bottom: 1rem; margin-top: 2rem; } /* Pushed down to avoid overlap with controls */
+            .mobile-logo i { width: 36px; height: 36px; font-size: 0.95rem; }
+            .mobile-logo span { font-size: 1.2rem; }
+            .form-heading { margin-bottom: 1.25rem; }
+            .form-heading h1 { font-size: 1.45rem; margin-bottom: 0.25rem; }
+            .form-heading p { font-size: 0.8rem; }
+            .form-heading .eyebrow { margin-bottom: 0.5rem; font-size: 0.65rem; }
+            .field { margin-bottom: 0.85rem; }
+            .input { padding: 0.65rem 1rem 0.65rem 2.4rem; font-size: 0.85rem; }
+            html[dir="rtl"] .input { padding: 0.65rem 2.4rem 0.65rem 1rem; }
+            .input.with-toggle { padding-right: 2.4rem; }
+            html[dir="rtl"] .input.with-toggle { padding-right: 2.4rem; padding-left: 2.4rem; }
+            .form-row { margin-bottom: 1.25rem; font-size: 0.75rem; }
+            .btn-submit { padding: 0.75rem; font-size: 0.85rem; }
+            .divider { margin: 1.15rem 0 0.85rem; font-size: 0.65rem; }
+            .social-row { margin-bottom: 1.25rem; gap: 0.5rem; }
+            .social-btn { padding: 0.6rem; }
+            .footer-note { font-size: 0.75rem; }
+            .demo-hint { margin-top: 1rem; padding: 0.6rem; font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating controls -->
+    <div class="controls">
+        <button id="lang-toggle" class="btn-control" title="Toggle RTL/LTR">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+        </button>
+        <button id="theme-toggle" class="btn-control" title="Toggle Dark Mode">
+            <svg class="light-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg class="dark-icon hidden" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Split auth layout -->
+    <div class="auth-wrapper">
+
+        <!-- LEFT — Visual panel -->
+        <aside class="visual-panel">
+            <div class="snowflake snowflake-1"><i class="fa-solid fa-snowflake"></i></div>
+            <div class="snowflake snowflake-2"><i class="fa-regular fa-snowflake"></i></div>
+            <div class="snowflake snowflake-3"><i class="fa-solid fa-snowflake"></i></div>
+
+            <div class="content">
+                <!-- Logo -->
+                <a href="index.html" class="visual-logo">
+                    <i class="fa-solid fa-snowflake text-accent text-3xl"></i><span class="text-accent text-2xl font-serif font-extrabold tracking-wide" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', serif; letter-spacing: 0.02em;">CRYOWELLNESS</span>
+                </a>
+
+                <!-- Headline -->
+                <h2 class="visual-headline">
+                    Recover faster.<br>
+                    <span>Perform stronger.</span>
+                </h2>
+                <p class="visual-subtext">
+                    Sign in to manage your cryotherapy sessions, track your recovery progress, and unlock the full power of whole-body wellness.
+                </p>
+
+                <!-- Features -->
+                <div class="visual-features">
+                    <div class="visual-feature">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Book sessions in seconds</span>
+                    </div>
+                    <div class="visual-feature">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Track your recovery progress</span>
+                    </div>
+                    <div class="visual-feature">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Manage your membership anytime</span>
+                    </div>
+                    <div class="visual-feature">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Access exclusive member benefits</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="content visual-stats">
+                <div>
+                    <div class="visual-stat-value">5K+</div>
+                    <div class="visual-stat-label">Sessions</div>
+                </div>
+                <div>
+                    <div class="visual-stat-value">98%</div>
+                    <div class="visual-stat-label">Satisfaction</div>
+                </div>
+                <div>
+                    <div class="visual-stat-value">-140°C</div>
+                    <div class="visual-stat-label">Chamber</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT — Form -->
+        <main class="form-panel">
+            <div class="form-container">
+
+                <!-- Mobile logo -->
+                <a href="index.html" class="mobile-logo">
+                    <i class="fa-solid fa-snowflake text-accent text-3xl" style="background:none; color:var(--color-accent); font-size:1.8rem; width:auto; height:auto;"></i><span class="text-accent" style="color:var(--color-accent);">CRYOWELLNESS</span>
+                </a>
+
+                <!-- Heading -->
+                <div class="form-heading">
+                    <span class="eyebrow">Member Access</span>
+                    <h1>Welcome back</h1>
+                    <p>Sign in to book sessions and continue your recovery journey.</p>
+                </div>
+
+                <!-- Form -->
+                <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+
+                    <div class="field">
+                        <label class="field-label" for="loginEmail">Email Address</label>
+                        <div class="field-wrapper">
+                            <input type="email" id="loginEmail" class="input" placeholder="you@example.com" required autocomplete="email">
+                            <i class="fa-solid fa-envelope field-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="loginPassword">Password</label>
+                        <div class="field-wrapper">
+                            <input type="password" id="loginPassword" class="input with-toggle" placeholder="••••••••" required autocomplete="current-password">
+                            <i class="fa-solid fa-lock field-icon"></i>
+                            <button type="button" class="btn-password-toggle" onclick="togglePassword('loginPassword', this)">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Sign In to Dashboard
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">or continue with</div>
+
+                <!-- Social -->
+                <div class="social-row">
+                    <button class="social-btn" title="Google" onclick="socialLogin('Google')">
+                        <svg viewBox="0 0 48 48">
+                            <path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.3 3.1l6.2-6.2C34.8 2.4 29.7 0 24 0 14.6 0 6.6 5.5 2.7 13.4l7.3 5.7C11.9 13.1 17.4 9.5 24 9.5z"/>
+                            <path fill="#34A853" d="M46.1 24.5c0-1.7-.2-3.3-.5-4.9H24v9.3h12.4c-.5 2.9-2.1 5.4-4.5 7.1l6.9 5.4c4-3.7 6.3-9.1 6.3-16.9z"/>
+                            <path fill="#FBBC05" d="M10 28.7c-.5-1.4-.8-2.9-.8-4.4s.3-3 .8-4.4l-7.3-5.7C1 17.1 0 20.4 0 24s1 6.9 2.7 9.8l7.3-5.7z"/>
+                            <path fill="#EA4335" d="M24 48c6.5 0 11.9-2.1 15.8-5.7l-6.9-5.4c-2 1.3-4.6 2.1-8.9 2.1-6.6 0-12.1-3.6-14.1-8.6l-7.3 5.7C6.6 42.5 14.6 48 24 48z"/>
+                        </svg>
+                    </button>
+                    <button class="social-btn" title="Apple" onclick="socialLogin('Apple')">
+                        <svg fill="currentColor" viewBox="0 0 24 24" style="color: var(--color-primary-text);">
+                            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                        </svg>
+                    </button>
+                    <button class="social-btn" title="Facebook" onclick="socialLogin('Facebook')">
+                        <svg fill="#1877F2" viewBox="0 0 24 24">
+                            <path d="M22 12a10 10 0 10-11.5 9.88v-7H8v-2.88h2.5V9.5c0-2.46 1.47-3.82 3.72-3.82 1.08 0 2.2.2 2.2.2v2.4h-1.24c-1.22 0-1.6.76-1.6 1.54v1.85H16l-.4 2.88h-2.18v7A10 10 0 0022 12z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Footer -->
+                <p class="footer-note">
+                    New to CryoWellness?
+                    <a href="signup.html">Create an account</a>
+                </p>
+
+                <!-- Demo hint -->
+                <div class="demo-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Demo: member@cryowellness.com / any password
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const html = document.documentElement;
+
+        // ── Theme toggle ──
+        const themeBtn = document.getElementById('theme-toggle');
+        const applyTheme = (theme) => {
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.querySelectorAll('.light-icon').forEach(i => i.classList.toggle('hidden', theme === 'dark'));
+            document.querySelectorAll('.dark-icon').forEach(i => i.classList.toggle('hidden', theme === 'light'));
+        };
+        themeBtn.addEventListener('click', () => {
+            applyTheme(html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        });
+        applyTheme(localStorage.getItem('theme') || 'light');
+
+        // ── RTL toggle ──
+        const langBtn = document.getElementById('lang-toggle');
+        langBtn.addEventListener('click', () => {
+            const isRtl = html.getAttribute('dir') === 'rtl';
+            html.setAttribute('dir', isRtl ? 'ltr' : 'rtl');
+            localStorage.setItem('dir', isRtl ? 'ltr' : 'rtl');
+        });
+        html.setAttribute('dir', localStorage.getItem('dir') || 'ltr');
+
+        // ── Password toggle ──
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // ── Login submit ──
+        function handleLogin() {
+            window.location.href = 'userdash.html';
+        }
+
+        // ── Social login ──
+        function socialLogin(provider) {
+            console.log('Social login with', provider);
+            window.location.href = 'userdash.html';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
