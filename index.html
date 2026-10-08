@@ -183,14 +183,13 @@
     <body class="antialiased flex flex-col min-h-screen">
 
         <header class="fixed top-4 left-0 right-0 z-50 transition-all duration-300 shadow-md border border-border bg-background mx-auto w-[96%] xl:w-[96%] 2xl:w-[92%] max-w-[1600px] rounded-full" id="main-header">
-            <nav class="px-6 sm:px-8 xl:px-6 2xl:px-12 py-3 flex items-center justify-between h-[70px]">
+            <nav class="relative px-6 sm:px-8 xl:px-6 2xl:px-12 py-3 flex items-center justify-between h-[70px]">
                 <a href="index.html" class="text-3xl font-serif font-extrabold tracking-wide flex items-center gap-2 shrink-0">    
                     <i class="fa-solid fa-snowflake text-accent"></i>
                     <span class="text-accent text-2xl">CRYOWELLNESS</span>
                 </a>
 
-                <div class="hidden xl:flex items-center xl:space-x-4 2xl:space-x-6 rtl:space-x-reverse">
-                    <div class="flex xl:space-x-3 2xl:space-x-6 rtl:space-x-reverse rtl:ml-6 text-primary-text font-medium text-[15px] 2xl:text-base">
+                <div class="hidden xl:flex absolute left-1/2 transform -translate-x-1/2 xl:space-x-3 2xl:space-x-6 rtl:space-x-reverse text-primary-text font-medium text-[15px] 2xl:text-base">
                         <div class="dropdown-wrapper">
                             <button class="nav-link flex items-center" id="home-dropdown-btn">
                                 Home
@@ -217,9 +216,7 @@
                         </div>
                     </div>
 
-                    <div class="w-px h-6 bg-border xl:mx-1 2xl:mx-3"></div>
-                    
-                    <div class="flex items-center xl:space-x-2 2xl:space-x-4 rtl:space-x-reverse">
+                    <div class="hidden xl:flex items-center xl:space-x-2 2xl:space-x-4 rtl:space-x-reverse">
                         <button id="theme-toggle" class="icon-btn text-primary-text hover:text-accent p-2 rounded-xl bg-hover border border-border transition duration-200">
                             <svg class="w-5 h-5 light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                             <svg class="w-5 h-5 dark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -237,7 +234,6 @@
                             </a>
                         </div>
                     </div>
-                </div>
 
                 <div class="xl:hidden flex items-center">
                     <button id="mobile-menu-open" class="icon-btn text-primary-text hover:text-accent p-1.5 rounded-full"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
@@ -757,8 +753,8 @@
 
         <footer id="main-footer" class="pt-20 transition-colors duration-300">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-gray-800">
-                    <div class="sm:col-span-2 lg:col-span-2">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 pb-16 border-b border-gray-800">
+                    <div class="lg:col-span-2">
                         <a href="index.html" class="text-3xl font-serif font-extrabold tracking-wide flex items-center gap-2 mb-4">    
                             <i class="fa-solid fa-snowflake text-accent"></i>
                             <span class="text-accent text-2xl">CRYOWELLNESS</span>
@@ -797,7 +793,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="sm:col-span-2 lg:col-span-1">                        <h4 class="footer-heading font-bold text-xl mb-6">Newsletter</h4>
+                    <div class="lg:col-span-1">                        <h4 class="footer-heading font-bold text-xl mb-6">Newsletter</h4>
                         <div class="flex flex-col space-y-4">
                             <input type="email" placeholder="Email address" class="p-4 text-sm rounded-xl bg-gray-900 border border-gray-800 focus:outline-none text-white" />
                             <button class="btn-primary font-bold py-3 rounded-xl">Subscribe</button>
@@ -963,6 +959,9 @@
         </script>
     </body>
     </html>
+
+
+
 
 
 
